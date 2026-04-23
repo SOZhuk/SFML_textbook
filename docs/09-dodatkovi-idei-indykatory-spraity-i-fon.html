@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="wrap">
-<nav class="page-nav"><a href="08-navchalnyi-proekt-kilka-kulok.html">Prev 8. Навчальний проект: кілька кульок</a><a href="index.html">Index</a></nav>
+<nav class="page-nav"><a href="08-navchalnyi-proekt-kilka-kulok.html">Prev 8. Навчальний проєкт: кілька кульок</a><a href="index.html">Index</a></nav>
 <section class="hero">
 <h1>9. Додаткові ідеї: індикатори, спрайти, анімація і фон</h1>
 </section>
@@ -97,7 +97,7 @@ player.setPosition(playerCenter);</code></pre>
 <pre><code class="language-cpp">window.draw(player);</code></pre>
 <p>Якщо ви вже перейшли на <code>std::vector&lt;Ball&gt;</code>, використовуйте швидкість і позицію першої кульки:</p>
 <pre><code class="language-cpp">sf::Vector2f v = balls[0].velocity;
-sf::Vector2f center = balls[0].position + sf::Vector2f(radius, radius);
+sf::Vector2f center = balls[0].position + sf::Vector2f(balls[0].radius, balls[0].radius);
 
 if (v.x != 0.f || v.y != 0.f) {
     float angle = std::atan2(v.y, v.x) * 180.f / PI;
@@ -217,7 +217,7 @@ window.draw(ball);</code></pre>
 <li>додати простий постріл після натискання <code>Space</code>.</li>
 </ul>
 <p>Головне правило лишається тим самим: одна нова ідея - один запуск - одна перевірка.</p></section>
-<nav class="page-nav"><a href="08-navchalnyi-proekt-kilka-kulok.html">Prev 8. Навчальний проект: кілька кульок</a><a href="index.html">Index</a></nav>
+<nav class="page-nav"><a href="08-navchalnyi-proekt-kilka-kulok.html">Prev 8. Навчальний проєкт: кілька кульок</a><a href="index.html">Index</a></nav>
 </div>
 <script src="assets/highlightjs/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>

@@ -3,19 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>8. Навчальний проект: кілька кульок</title>
+  <title>8. Навчальний проєкт: кілька кульок</title>
   <link rel="stylesheet" href="assets/book.css" />
   <link rel="stylesheet" href="assets/highlightjs/styles/panda-syntax-dark.min.css" />
 </head>
 <body>
 <div class="wrap">
-<nav class="page-nav"><a href="07-navchalnyi-proekt-pole-kolir-i-keruvannia.html">Prev 7. Навчальний проект: поле, колір і керування</a><a href="index.html">Index</a><a href="09-dodatkovi-idei-indykatory-spraity-i-fon.html">Next 9. Додаткові ідеї: індикатори, спрайти, анімація і фон</a></nav>
+<nav class="page-nav"><a href="07-navchalnyi-proekt-pole-kolir-i-keruvannia.html">Prev 7. Навчальний проєкт: поле, колір і керування</a><a href="index.html">Index</a><a href="09-dodatkovi-idei-indykatory-spraity-i-fon.html">Next 9. Додаткові ідеї: індикатори, спрайти, анімація і фон</a></nav>
 <section class="hero">
-<h1>8. Навчальний проект: кілька кульок</h1>
+<h1>8. Навчальний проєкт: кілька кульок</h1>
 </section>
 <section class="card"><p>Цей розділ складніший. Тут з&#x27;являються <code>struct</code>, <code>std::vector</code>, цикли по об&#x27;єктах і прості зіткнення. Якщо ви впевнено зробили попередні кроки, переходьте далі.</p>
 <h2>Крок 11. Багато кульок</h2>
 <p>Для кількох кульок зручно створити окремий тип даних:</p>
+<p>До цього стан однієї кульки зберігався в окремих змінних: <code>position</code>, <code>velocity</code>, <code>radius</code>, <code>color</code>. Коли кульок стає кілька, такий підхід швидко плутає код: довелося б створювати <code>position1</code>, <code>position2</code>, <code>velocity1</code>, <code>velocity2</code> і повторювати однакову логіку.</p>
+<p><code>struct Ball</code> збирає всі властивості однієї кульки в один об&#x27;єкт. А <code>std::vector&lt;Ball&gt;</code> зберігає список таких об&#x27;єктів. Після цього можна написати один цикл і виконати ті самі дії для кожної кульки: оновити позицію, перевірити межі, намалювати.</p>
 <pre><code class="language-cpp">struct Ball {
     sf::Vector2f position;
     sf::Vector2f velocity;
@@ -120,7 +122,7 @@ bool areTouching(const Ball&amp; a, const Ball&amp; b) {
 <p>Це спрощена модель. Вона може давати повторні удари, якщо кульки сильно перекрилися. Для сильніших: спробуйте розсувати кульки після зіткнення або використати нормаль між центрами, як у наближеній фізиці більярдних куль.</p>
 <h2>Контрольна точка</h2>
 <p>Після цього розділу у вас є вже не одна кулька, а набір об&#x27;єктів. Вони рухаються за одними правилами, можуть додаватися мишкою і приблизно реагують на зіткнення.</p></section>
-<nav class="page-nav"><a href="07-navchalnyi-proekt-pole-kolir-i-keruvannia.html">Prev 7. Навчальний проект: поле, колір і керування</a><a href="index.html">Index</a><a href="09-dodatkovi-idei-indykatory-spraity-i-fon.html">Next 9. Додаткові ідеї: індикатори, спрайти, анімація і фон</a></nav>
+<nav class="page-nav"><a href="07-navchalnyi-proekt-pole-kolir-i-keruvannia.html">Prev 7. Навчальний проєкт: поле, колір і керування</a><a href="index.html">Index</a><a href="09-dodatkovi-idei-indykatory-spraity-i-fon.html">Next 9. Додаткові ідеї: індикатори, спрайти, анімація і фон</a></nav>
 </div>
 <script src="assets/highlightjs/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>

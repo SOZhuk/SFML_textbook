@@ -155,7 +155,7 @@ window.draw(player);
 
 ```cpp
 sf::Vector2f v = balls[0].velocity;
-sf::Vector2f center = balls[0].position + sf::Vector2f(radius, radius);
+sf::Vector2f center = balls[0].position + sf::Vector2f(balls[0].radius, balls[0].radius);
 
 if (v.x != 0.f || v.y != 0.f) {
     float angle = std::atan2(v.y, v.x) * 180.f / PI;

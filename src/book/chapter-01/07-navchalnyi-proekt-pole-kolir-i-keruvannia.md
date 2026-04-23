@@ -1,4 +1,4 @@
-# 7. Навчальний проект: поле, колір і керування
+# 7. Навчальний проєкт: поле, колір і керування
 
 Цей розділ продовжує попередній. Ми не переписуємо програму з нуля, а поступово додаємо нові можливості до вже робочої кульки.
 
@@ -88,6 +88,24 @@ if (position.x + 2.f * radius >= playArea.position.x + playArea.size.x) {
 
 Так само зробіть для `y`.
 
+:::details Перевірка меж по осі y
+Якщо не виходить перенести логіку з `x` на `y`, звіртеся з цим фрагментом.
+
+```cpp
+if (position.y <= playArea.position.y) {
+    position.y = playArea.position.y;
+    velocity.y = -velocity.y;
+    bounced = true;
+}
+
+if (position.y + 2.f * radius >= playArea.position.y + playArea.size.y) {
+    position.y = playArea.position.y + playArea.size.y - 2.f * radius;
+    velocity.y = -velocity.y;
+    bounced = true;
+}
+```
+:::
+
 У малюванні додайте межу поля перед кулькою:
 
 ```cpp
@@ -132,6 +150,14 @@ if (velocity.x < -maxSpeed) velocity.x = -maxSpeed;
 if (velocity.y > maxSpeed) velocity.y = maxSpeed;
 if (velocity.y < -maxSpeed) velocity.y = -maxSpeed;
 ```
+
+Як додаткове завдання можна додати просте тертя, щоб кулька поступово сповільнювалася, коли клавіші не натиснуті. Після обробки клавіатури і обмеження швидкості помножте швидкість на число трохи менше за `1`:
+
+```cpp
+velocity *= 0.99f;
+```
+
+Значення `0.99f` дає слабке сповільнення. Якщо взяти `0.95f`, кулька гальмуватиме помітно швидше.
 
 Проміжний результат: стрілки впливають на напрям і швидкість руху.
 
@@ -195,6 +221,10 @@ if (const auto* key = event->getIf<sf::Event::KeyPressed>()) {
 ## Крок 10. Текстовий лічильник у вікні
 
 Щоб показати текст прямо у вікні, потрібен файл шрифту. Завантажте [NotoSans-Regular.ttf](static/fonts/NotoSans-Regular.ttf) або весь [набір навчальних файлів](static/assets.zip), створіть у своєму C++ проєкті папку `assets` і покладіть шрифт туди.
+
+:::warning Увага
+Шлях `assets/NotoSans-Regular.ttf` рахується від робочої директорії, з якої запускається програма. Якщо файл існує, але SFML його не знаходить, перевірте, звідки саме запускається `.exe`: зазвичай найпростіше покласти папку `assets` у корінь проєкту і запускати програму з цього кореня.
+:::
 
 ```cpp
 sf::Font font("assets/NotoSans-Regular.ttf");

@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="wrap">
-<nav class="page-nav"><a href="04-struktura-i-tekhnichni-detali.html">Prev 4. Структура і технічні деталі</a><a href="index.html">Index</a><a href="06-navchalnyi-proekt-bazova-kulka.html">Next 6. Навчальний проект: базова кулька</a></nav>
+<nav class="page-nav"><a href="04-struktura-i-tekhnichni-detali.html">Prev 4. Структура і технічні деталі</a><a href="index.html">Index</a><a href="06-navchalnyi-proekt-bazova-kulka.html">Next 6. Навчальний проєкт: базова кулька</a></nav>
 <section class="hero">
 <h1>5. Об&#x27;єкти рендерінгу</h1>
 </section>
@@ -55,6 +55,7 @@ sf::Text label(font, &quot;Score: 0&quot;, 24);</code></pre>
 <pre><code class="language-cpp">label.setPosition({20.f, 20.f});
 window.draw(label);</code></pre>
 <p>Текст зручно використовувати для лічильників, повідомлень, меню і налагоджувальної інформації.</p>
+<p>Для базового проєкту достатньо <code>sf::Shape</code>, <code>sf::Text</code> і пізніше <code>sf::Sprite</code>. <code>sf::RenderTexture</code> та <code>sf::Image</code> корисні для розширень, але на першому проході їх можна читати як додаткові можливості.</p>
 <h2>Поверхні для проміжного малювання</h2>
 <p>Іноді потрібно малювати не одразу у вікно, а на окрему поверхню. Для цього в SFML є <code>sf::RenderTexture</code>.</p>
 <pre><code class="language-cpp">sf::RenderTexture surface({800, 600});
@@ -84,7 +85,7 @@ sf::Sprite sprite(texture);</code></pre>
 <li><code>sf::Image</code> - робота з пікселями в пам&#x27;яті.</li>
 </ul>
 <p>У наступному розділі ці об&#x27;єкти будемо використовувати практично: поступово зберемо навчальний проєкт із кулькою, рухом, межами, керуванням і додатковими ефектами.</p></section>
-<nav class="page-nav"><a href="04-struktura-i-tekhnichni-detali.html">Prev 4. Структура і технічні деталі</a><a href="index.html">Index</a><a href="06-navchalnyi-proekt-bazova-kulka.html">Next 6. Навчальний проект: базова кулька</a></nav>
+<nav class="page-nav"><a href="04-struktura-i-tekhnichni-detali.html">Prev 4. Структура і технічні деталі</a><a href="index.html">Index</a><a href="06-navchalnyi-proekt-bazova-kulka.html">Next 6. Навчальний проєкт: базова кулька</a></nav>
 </div>
 <script src="assets/highlightjs/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>

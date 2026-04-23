@@ -14,11 +14,24 @@
 <h1>2. Створення та запуск першого проєкту SFML</h1>
 </section>
 <section class="card"><p>Основний навчальний маршрут використовує репозиторій, підготовлений викладачем. У ньому вже є налаштування VS Code, тому не потрібно окремо налаштовувати CMake. Такий проєкт збирається динамічно, а вихідний файл програми займає значно менше місця.</p>
+<p>Спочатку запустимо готовий проєкт, а в наступному розділі розберемо, що саме працює всередині.</p>
 <h2>Основний маршрут: готовий проєкт</h2>
 <aside class="note note-warning"><strong class="note-title">Увага</strong><p>Перед клонуванням оберіть папку для проєкту зі шляхом без кириличних літер, наприклад <code>D:\Projects</code>. Якщо шлях містить кирилицю, інструменти збірки можуть не знайти файли або завершити компіляцію з помилкою.</p></aside>
 <p>Клонуйте готовий  <a href="https://github.com/SOZhuk/SFML_template" target="_blank" rel="noreferrer">репозиторій з шаблоном</a>:</p>
 <pre><code class="language-powershell">git clone https://github.com/SOZhuk/SFML_template.git</code></pre>
-<p>Якщо вам потрібна допомога по командам git, можете скористатись <a href="https://git-practicum-a22961.gitlab.io/git-practicum.html" target="_blank" rel="noreferrer">довідником</a></p>
+<p>Якщо потрібна допомога з командами Git, скористайтеся <a href="https://git-practicum-a22961.gitlab.io/git-practicum.html" target="_blank" rel="noreferrer">довідником</a>.</p>
+<details class="details-block"><summary>Короткий довідник Git</summary><div class="details-body"><p>Найчастіше в навчальних проєктах знадобляться такі команди.</p>
+<pre><code class="language-powershell">git config --global user.name &quot;Ваше Ім&#x27;я&quot;
+git config --global user.email &quot;you@example.com&quot;</code></pre>
+<pre><code class="language-powershell">git clone https://github.com/&lt;користувач&gt;/&lt;репозиторій&gt;.git
+cd &lt;репозиторій&gt;</code></pre>
+<pre><code class="language-powershell">git status
+git add .
+git commit -m &quot;Короткий опис зміни&quot;
+git push</code></pre>
+<pre><code class="language-powershell">git pull
+git log --oneline</code></pre>
+<p><code>git status</code> показує поточні зміни, <code>git add</code> готує їх до коміту, <code>git commit</code> зберігає зміни локально, а <code>git push</code> відправляє їх у віддалений репозиторій.</p></div></details>
 <p>Перейдіть у папку проєкту:</p>
 <pre><code class="language-powershell">cd SFML_template</code></pre>
 <p>Відкрийте її у VS Code:</p>
@@ -74,15 +87,8 @@
 <pre><code class="language-text">CMake: Build</code></pre>
 <p>Або скористайтесь кнопкою <strong>Build</strong> на CMake-панелі внизу VS Code.</p>
 <p>Перший build може тривати довше, тому що шаблонний проєкт завантажує і збирає залежності. Якщо збірка завершилась успішно, можна запускати програму з VS Code.</p>
-<p>Працюємо з готовим репозиторієм, підготовленим викладачем. Основний код розміщений у файлі <code>src/main.cpp</code>.</p>
-<p>Послідовність дій:</p>
-<ol>
-<li>Клонуйте <a href="https://github.com/SOZhuk/SFML_template" target="_blank" rel="noreferrer">репозиторій з шаблоном</a>.</li>
-<li>Відкрийте папку проєкту у VS Code.</li>
-<li>Переконайтеся, що основний код доступний у <code>src/main.cpp</code>.</li>
-<li>Запустіть проєкт через <code>F5</code>.</li>
-</ol>
-<p>Очікуваний результат: вікно SFML успішно відкривається, і ви готові переходити до технічних деталей роботи програми.</p></section>
+<h2>Підсумок</h2>
+<p>Після виконання одного з маршрутів проєкт має скомпілюватися, а під час запуску має відкритися SFML-вікно з кулькою: зеленою для CMake-маршруту, жовтою для власного репозиторію на основі підготовленого шаблону.</p></section>
 <nav class="page-nav"><a href="01-nalashtuvannia-seredovyshcha.html">Prev 1. Налаштування середовища</a><a href="index.html">Index</a><a href="03-vstup-i-zahalna-informatsiia.html">Next 3. Вступ і загальна інформація</a></nav>
 </div>
 <script src="assets/highlightjs/highlight.min.js"></script>

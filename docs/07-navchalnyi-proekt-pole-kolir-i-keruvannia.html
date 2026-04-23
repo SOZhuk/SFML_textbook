@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>7. Навчальний проект: поле, колір і керування</title>
+  <title>7. Навчальний проєкт: поле, колір і керування</title>
   <link rel="stylesheet" href="assets/book.css" />
   <link rel="stylesheet" href="assets/highlightjs/styles/panda-syntax-dark.min.css" />
 </head>
 <body>
 <div class="wrap">
-<nav class="page-nav"><a href="06-navchalnyi-proekt-bazova-kulka.html">Prev 6. Навчальний проект: базова кулька</a><a href="index.html">Index</a><a href="08-navchalnyi-proekt-kilka-kulok.html">Next 8. Навчальний проект: кілька кульок</a></nav>
+<nav class="page-nav"><a href="06-navchalnyi-proekt-bazova-kulka.html">Prev 6. Навчальний проєкт: базова кулька</a><a href="index.html">Index</a><a href="08-navchalnyi-proekt-kilka-kulok.html">Next 8. Навчальний проєкт: кілька кульок</a></nav>
 <section class="hero">
-<h1>7. Навчальний проект: поле, колір і керування</h1>
+<h1>7. Навчальний проєкт: поле, колір і керування</h1>
 </section>
 <section class="card"><p>Цей розділ продовжує попередній. Ми не переписуємо програму з нуля, а поступово додаємо нові можливості до вже робочої кульки.</p>
 <h2>Крок 6. Колір після удару</h2>
@@ -62,6 +62,18 @@ if (position.x + 2.f * radius &gt;= playArea.position.x + playArea.size.x) {
     bounced = true;
 }</code></pre>
 <p>Так само зробіть для <code>y</code>.</p>
+<details class="details-block"><summary>Перевірка меж по осі y</summary><div class="details-body"><p>Якщо не виходить перенести логіку з <code>x</code> на <code>y</code>, звіртеся з цим фрагментом.</p>
+<pre><code class="language-cpp">if (position.y &lt;= playArea.position.y) {
+    position.y = playArea.position.y;
+    velocity.y = -velocity.y;
+    bounced = true;
+}
+
+if (position.y + 2.f * radius &gt;= playArea.position.y + playArea.size.y) {
+    position.y = playArea.position.y + playArea.size.y - 2.f * radius;
+    velocity.y = -velocity.y;
+    bounced = true;
+}</code></pre></div></details>
 <p>У малюванні додайте межу поля перед кулькою:</p>
 <pre><code class="language-cpp">window.draw(border);
 window.draw(ball);</code></pre>
@@ -91,6 +103,9 @@ if (velocity.x &gt; maxSpeed) velocity.x = maxSpeed;
 if (velocity.x &lt; -maxSpeed) velocity.x = -maxSpeed;
 if (velocity.y &gt; maxSpeed) velocity.y = maxSpeed;
 if (velocity.y &lt; -maxSpeed) velocity.y = -maxSpeed;</code></pre>
+<p>Як додаткове завдання можна додати просте тертя, щоб кулька поступово сповільнювалася, коли клавіші не натиснуті. Після обробки клавіатури і обмеження швидкості помножте швидкість на число трохи менше за <code>1</code>:</p>
+<pre><code class="language-cpp">velocity *= 0.99f;</code></pre>
+<p>Значення <code>0.99f</code> дає слабке сповільнення. Якщо взяти <code>0.95f</code>, кулька гальмуватиме помітно швидше.</p>
 <p>Проміжний результат: стрілки впливають на напрям і швидкість руху.</p>
 <p>Спробуйте ще: зробіть <code>accel</code> більшим або меншим.</p>
 <h2>Крок 9. Лічильник відбивань</h2>
@@ -125,6 +140,7 @@ if (velocity.y &lt; -maxSpeed) velocity.y = -maxSpeed;</code></pre>
 <p>Це саме події, а не стан клавіатури: дія виконується один раз у момент натискання.</p>
 <h2>Крок 10. Текстовий лічильник у вікні</h2>
 <p>Щоб показати текст прямо у вікні, потрібен файл шрифту. Завантажте <a href="static/fonts/NotoSans-Regular.ttf" target="_blank" rel="noreferrer">NotoSans-Regular.ttf</a> або весь <a href="static/assets.zip" target="_blank" rel="noreferrer">набір навчальних файлів</a>, створіть у своєму C++ проєкті папку <code>assets</code> і покладіть шрифт туди.</p>
+<aside class="note note-warning"><strong class="note-title">Увага</strong><p>Шлях <code>assets/NotoSans-Regular.ttf</code> рахується від робочої директорії, з якої запускається програма. Якщо файл існує, але SFML його не знаходить, перевірте, звідки саме запускається <code>.exe</code>: зазвичай найпростіше покласти папку <code>assets</code> у корінь проєкту і запускати програму з цього кореня.</p></aside>
 <pre><code class="language-cpp">sf::Font font(&quot;assets/NotoSans-Regular.ttf&quot;);
 sf::Text label(font, &quot;Bounces: 0&quot;, 24);
 label.setPosition({20.f, 20.f});</code></pre>
@@ -144,7 +160,7 @@ label.setPosition({20.f, 20.f});</code></pre>
 <li>рахує відбивання.</li>
 </ul>
 <p>Якщо далі стає складно, можна зупинитися тут: це вже хороший базовий результат.</p></section>
-<nav class="page-nav"><a href="06-navchalnyi-proekt-bazova-kulka.html">Prev 6. Навчальний проект: базова кулька</a><a href="index.html">Index</a><a href="08-navchalnyi-proekt-kilka-kulok.html">Next 8. Навчальний проект: кілька кульок</a></nav>
+<nav class="page-nav"><a href="06-navchalnyi-proekt-bazova-kulka.html">Prev 6. Навчальний проєкт: базова кулька</a><a href="index.html">Index</a><a href="08-navchalnyi-proekt-kilka-kulok.html">Next 8. Навчальний проєкт: кілька кульок</a></nav>
 </div>
 <script src="assets/highlightjs/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>

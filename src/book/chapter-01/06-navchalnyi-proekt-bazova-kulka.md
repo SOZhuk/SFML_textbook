@@ -1,4 +1,4 @@
-# 6. Навчальний проект: базова кулька
+# 6. Навчальний проєкт: базова кулька
 
 Починаємо з маленьких кроків. Після кожного кроку проєкт має компілюватися і запускатися. Якщо щось пішло не так, легше повернутися на один крок назад, ніж шукати помилку у великому файлі.
 
@@ -170,6 +170,16 @@ if (position.y + 2.f * radius >= windowHeight) {
 ball.setPosition(position);
 ```
 
+У цьому варіанті `position` означає лівий верхній кут прямокутної області, у яку вписане коло. Тому правий край кульки має координату `position.x + 2.f * radius`, а нижній край - `position.y + 2.f * radius`.
+
+SFML дозволяє змінити точку прив'язки об'єкта через `setOrigin(...)`. Наприклад, якщо поставити origin у центр кола, то `position` можна буде читати як координату центра:
+
+```cpp
+ball.setOrigin({radius, radius});
+```
+
+Тоді перевірки меж записувалися б інакше: лівий край був би `position.x - radius`, а правий - `position.x + radius`. У цьому проєкті залишаємо стандартну прив'язку до лівого верхнього кута, щоб усі наступні кроки використовували одну й ту саму модель координат.
+
 Проміжний результат: кулька рухається і відбивається від країв вікна.
 
 Спробуйте ще: змініть радіус кульки і перевірте, чи вона все одно правильно відбивається.
@@ -184,3 +194,71 @@ ball.setPosition(position);
 - кулька відбивається від країв.
 
 Це перший робочий результат. Далі будемо додавати колір, поле, керування і лічильники.
+
+:::details Повний код після кроку 5
+Якщо ваша програма не компілюється або кулька поводиться не так, звірте свій `src/main.cpp` з цим варіантом.
+
+```cpp
+#include <SFML/Graphics.hpp>
+#include <optional>
+
+int main() {
+    sf::RenderWindow window(sf::VideoMode({800, 600}), "SFML lesson");
+    window.setFramerateLimit(60);
+
+    const float windowWidth = 800.f;
+    const float windowHeight = 600.f;
+
+    float radius = 30.f;
+    sf::Vector2f position{100.f, 100.f};
+    sf::Vector2f velocity{160.f, 120.f};
+    sf::Color color = sf::Color::Green;
+
+    sf::CircleShape ball(radius);
+    ball.setPosition(position);
+    ball.setFillColor(color);
+
+    sf::Clock clock;
+
+    while (window.isOpen()) {
+        float dt = clock.restart().asSeconds();
+
+        while (const std::optional event = window.pollEvent()) {
+            if (event->is<sf::Event::Closed>()) {
+                window.close();
+            }
+        }
+
+        position += velocity * dt;
+
+        if (position.x <= 0.f) {
+            position.x = 0.f;
+            velocity.x = -velocity.x;
+        }
+
+        if (position.x + 2.f * radius >= windowWidth) {
+            position.x = windowWidth - 2.f * radius;
+            velocity.x = -velocity.x;
+        }
+
+        if (position.y <= 0.f) {
+            position.y = 0.f;
+            velocity.y = -velocity.y;
+        }
+
+        if (position.y + 2.f * radius >= windowHeight) {
+            position.y = windowHeight - 2.f * radius;
+            velocity.y = -velocity.y;
+        }
+
+        ball.setPosition(position);
+
+        window.clear(sf::Color(30, 30, 30));
+        window.draw(ball);
+        window.display();
+    }
+
+    return 0;
+}
+```
+:::

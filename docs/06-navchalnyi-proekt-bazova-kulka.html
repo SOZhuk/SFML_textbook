@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>6. Навчальний проект: базова кулька</title>
+  <title>6. Навчальний проєкт: базова кулька</title>
   <link rel="stylesheet" href="assets/book.css" />
   <link rel="stylesheet" href="assets/highlightjs/styles/panda-syntax-dark.min.css" />
 </head>
 <body>
 <div class="wrap">
-<nav class="page-nav"><a href="05-obiekty-renderinhu.html">Prev 5. Об&#x27;єкти рендерінгу</a><a href="index.html">Index</a><a href="07-navchalnyi-proekt-pole-kolir-i-keruvannia.html">Next 7. Навчальний проект: поле, колір і керування</a></nav>
+<nav class="page-nav"><a href="05-obiekty-renderinhu.html">Prev 5. Об&#x27;єкти рендерінгу</a><a href="index.html">Index</a><a href="07-navchalnyi-proekt-pole-kolir-i-keruvannia.html">Next 7. Навчальний проєкт: поле, колір і керування</a></nav>
 <section class="hero">
-<h1>6. Навчальний проект: базова кулька</h1>
+<h1>6. Навчальний проєкт: базова кулька</h1>
 </section>
 <section class="card"><p>Починаємо з маленьких кроків. Після кожного кроку проєкт має компілюватися і запускатися. Якщо щось пішло не так, легше повернутися на один крок назад, ніж шукати помилку у великому файлі.</p>
 <p>Працюємо в одному файлі <code>src/main.cpp</code>. Для першого графічного проєкту це нормально: головне зараз зрозуміти цикл програми, стан об&#x27;єкта і малювання кадру.</p>
@@ -115,6 +115,10 @@ if (position.y + 2.f * radius &gt;= windowHeight) {
 }
 
 ball.setPosition(position);</code></pre>
+<p>У цьому варіанті <code>position</code> означає лівий верхній кут прямокутної області, у яку вписане коло. Тому правий край кульки має координату <code>position.x + 2.f * radius</code>, а нижній край - <code>position.y + 2.f * radius</code>.</p>
+<p>SFML дозволяє змінити точку прив&#x27;язки об&#x27;єкта через <code>setOrigin(...)</code>. Наприклад, якщо поставити origin у центр кола, то <code>position</code> можна буде читати як координату центра:</p>
+<pre><code class="language-cpp">ball.setOrigin({radius, radius});</code></pre>
+<p>Тоді перевірки меж записувалися б інакше: лівий край був би <code>position.x - radius</code>, а правий - <code>position.x + radius</code>. У цьому проєкті залишаємо стандартну прив&#x27;язку до лівого верхнього кута, щоб усі наступні кроки використовували одну й ту саму модель координат.</p>
 <p>Проміжний результат: кулька рухається і відбивається від країв вікна.</p>
 <p>Спробуйте ще: змініть радіус кульки і перевірте, чи вона все одно правильно відбивається.</p>
 <h2>Контрольна точка</h2>
@@ -125,8 +129,70 @@ ball.setPosition(position);</code></pre>
 <li>кулька рухається;</li>
 <li>кулька відбивається від країв.</li>
 </ul>
-<p>Це перший робочий результат. Далі будемо додавати колір, поле, керування і лічильники.</p></section>
-<nav class="page-nav"><a href="05-obiekty-renderinhu.html">Prev 5. Об&#x27;єкти рендерінгу</a><a href="index.html">Index</a><a href="07-navchalnyi-proekt-pole-kolir-i-keruvannia.html">Next 7. Навчальний проект: поле, колір і керування</a></nav>
+<p>Це перший робочий результат. Далі будемо додавати колір, поле, керування і лічильники.</p>
+<details class="details-block"><summary>Повний код після кроку 5</summary><div class="details-body"><p>Якщо ваша програма не компілюється або кулька поводиться не так, звірте свій <code>src/main.cpp</code> з цим варіантом.</p>
+<pre><code class="language-cpp">#include &lt;SFML/Graphics.hpp&gt;
+#include &lt;optional&gt;
+
+int main() {
+    sf::RenderWindow window(sf::VideoMode({800, 600}), &quot;SFML lesson&quot;);
+    window.setFramerateLimit(60);
+
+    const float windowWidth = 800.f;
+    const float windowHeight = 600.f;
+
+    float radius = 30.f;
+    sf::Vector2f position{100.f, 100.f};
+    sf::Vector2f velocity{160.f, 120.f};
+    sf::Color color = sf::Color::Green;
+
+    sf::CircleShape ball(radius);
+    ball.setPosition(position);
+    ball.setFillColor(color);
+
+    sf::Clock clock;
+
+    while (window.isOpen()) {
+        float dt = clock.restart().asSeconds();
+
+        while (const std::optional event = window.pollEvent()) {
+            if (event-&gt;is&lt;sf::Event::Closed&gt;()) {
+                window.close();
+            }
+        }
+
+        position += velocity * dt;
+
+        if (position.x &lt;= 0.f) {
+            position.x = 0.f;
+            velocity.x = -velocity.x;
+        }
+
+        if (position.x + 2.f * radius &gt;= windowWidth) {
+            position.x = windowWidth - 2.f * radius;
+            velocity.x = -velocity.x;
+        }
+
+        if (position.y &lt;= 0.f) {
+            position.y = 0.f;
+            velocity.y = -velocity.y;
+        }
+
+        if (position.y + 2.f * radius &gt;= windowHeight) {
+            position.y = windowHeight - 2.f * radius;
+            velocity.y = -velocity.y;
+        }
+
+        ball.setPosition(position);
+
+        window.clear(sf::Color(30, 30, 30));
+        window.draw(ball);
+        window.display();
+    }
+
+    return 0;
+}</code></pre></div></details></section>
+<nav class="page-nav"><a href="05-obiekty-renderinhu.html">Prev 5. Об&#x27;єкти рендерінгу</a><a href="index.html">Index</a><a href="07-navchalnyi-proekt-pole-kolir-i-keruvannia.html">Next 7. Навчальний проєкт: поле, колір і керування</a></nav>
 </div>
 <script src="assets/highlightjs/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
