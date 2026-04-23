@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5. Об'єкти рендерінгу</title>
+  <link rel="stylesheet" href="assets/book.css" />
+  <link rel="stylesheet" href="assets/highlightjs/styles/panda-syntax-dark.min.css" />
+</head>
+<body>
+<div class="wrap">
+<nav class="page-nav"><a href="04-struktura-i-tekhnichni-detali.html">Prev 4. Структура і технічні деталі</a><a href="index.html">Index</a><a href="06-navchalnyi-proekt-bazova-kulka.html">Next 6. Навчальний проект: базова кулька</a></nav>
+<section class="hero">
+<h1>5. Об&#x27;єкти рендерінгу</h1>
+</section>
+<section class="card"><p>У SFML усе, що можна намалювати через <code>window.draw(...)</code>, є графічним об&#x27;єктом. Найчастіше на початку роботи використовують фігури, спрайти, текст, вершини і допоміжні поверхні для проміжного малювання.</p>
+<p>Головна ідея проста: ми створюємо об&#x27;єкт, налаштовуємо його властивості, а потім передаємо його у <code>draw</code>.</p>
+<pre><code class="language-cpp">window.draw(shape);</code></pre>
+<h2>Фігури</h2>
+<p>Фігури зручні для простих геометричних об&#x27;єктів: кульок, прямокутників, меж поля, кнопок, індикаторів.</p>
+<p>Коло:</p>
+<pre><code class="language-cpp">sf::CircleShape ball(30.f);
+ball.setFillColor(sf::Color::Green);</code></pre>
+<p>Прямокутник:</p>
+<pre><code class="language-cpp">sf::RectangleShape wall({200.f, 20.f});
+wall.setFillColor(sf::Color::Blue);</code></pre>
+<p>Опуклий багатокутник:</p>
+<pre><code class="language-cpp">sf::ConvexShape triangle(3);
+triangle.setPoint(0, {0.f, 60.f});</code></pre>
+<p><code>sf::CircleShape</code>, <code>sf::RectangleShape</code> і <code>sf::ConvexShape</code> мають спільну основу <code>sf::Shape</code>, тому багато методів у них схожі: <code>setPosition</code>, <code>move</code>, <code>setFillColor</code>, <code>setOutlineColor</code>, <code>setOutlineThickness</code>.</p>
+<pre><code class="language-cpp">ball.setPosition({100.f, 80.f});
+ball.move({5.f, 0.f});</code></pre>
+<h2>Лінії, точки і вершини</h2>
+<p>SFML не має окремої команди на кшталт <code>drawPixel(x, y)</code> для малювання одного пікселя прямо у вікно. Але можна намалювати окрему точку або набір точок через вершини.</p>
+<p>Одна точка:</p>
+<pre><code class="language-cpp">std::array point{sf::Vertex{{100.f, 100.f}, sf::Color::White}};
+window.draw(point.data(), point.size(), sf::PrimitiveType::Points);</code></pre>
+<p>Лінія:</p>
+<pre><code class="language-cpp">std::array line{sf::Vertex{{10.f, 10.f}}, sf::Vertex{{200.f, 120.f}}};
+window.draw(line.data(), line.size(), sf::PrimitiveType::Lines);</code></pre>
+<p>Такий спосіб корисний для сіток, простих графіків, частинок або власної геометрії. Для масового малювання точок краще готувати одразу масив вершин, а не викликати <code>draw</code> для кожної точки окремо.</p>
+<h2>Зображення, текстури і спрайти</h2>
+<p>Для малювання готової картинки використовують пару <code>sf::Texture</code> і <code>sf::Sprite</code>.</p>
+<pre><code class="language-cpp">sf::Texture texture(&quot;assets/player.png&quot;);
+sf::Sprite player(texture);</code></pre>
+<p>Текстура зберігає пікселі зображення у пам&#x27;яті, зручній для відеокарти. Спрайт описує, як саме показати цю текстуру у вікні: позицію, масштаб, поворот, видиму частину.</p>
+<pre><code class="language-cpp">player.setPosition({120.f, 80.f});
+window.draw(player);</code></pre>
+<p>Важливо: спрайт не копіює текстуру всередину себе. Текстура має існувати весь час, поки використовується спрайт.</p>
+<h2>Текст</h2>
+<p>Текст теж є об&#x27;єктом рендерінгу. Для нього потрібен шрифт.</p>
+<pre><code class="language-cpp">sf::Font font(&quot;assets/NotoSans-Regular.ttf&quot;);
+sf::Text label(font, &quot;Score: 0&quot;, 24);</code></pre>
+<p>Після цього текст можна розміщувати і малювати так само, як інші об&#x27;єкти:</p>
+<pre><code class="language-cpp">label.setPosition({20.f, 20.f});
+window.draw(label);</code></pre>
+<p>Текст зручно використовувати для лічильників, повідомлень, меню і налагоджувальної інформації.</p>
+<h2>Поверхні для проміжного малювання</h2>
+<p>Іноді потрібно малювати не одразу у вікно, а на окрему поверхню. Для цього в SFML є <code>sf::RenderTexture</code>.</p>
+<pre><code class="language-cpp">sf::RenderTexture surface({800, 600});
+surface.clear(sf::Color::Transparent);</code></pre>
+<p>У таку поверхню можна малювати ті самі об&#x27;єкти:</p>
+<pre><code class="language-cpp">surface.draw(ball);
+surface.display();</code></pre>
+<p>Потім результат можна використати як текстуру і показати у вікні через спрайт:</p>
+<pre><code class="language-cpp">sf::Sprite cachedLayer(surface.getTexture());
+window.draw(cachedLayer);</code></pre>
+<p>Цей підхід корисний, коли частину сцени не потрібно перемальовувати з нуля кожен кадр. Наприклад, фон, статичну сітку або складний шар можна підготувати один раз, а потім швидко показувати як спрайт.</p>
+<h2>Прямий доступ до пікселів</h2>
+<p>Якщо потрібно змінювати окремі пікселі зображення, для цього використовують <code>sf::Image</code>.</p>
+<pre><code class="language-cpp">sf::Image image({100, 100}, sf::Color::Black);
+image.setPixel({10, 20}, sf::Color::Red);</code></pre>
+<p><code>sf::Image</code> зберігає пікселі в оперативній пам&#x27;яті. Щоб показати результат у вікні, його зазвичай завантажують у <code>sf::Texture</code>, а потім малюють через <code>sf::Sprite</code>.</p>
+<pre><code class="language-cpp">sf::Texture texture(image);
+sf::Sprite sprite(texture);</code></pre>
+<p>Це зручно для генерації зображень або простих ефектів, але не варто змінювати тисячі пікселів через <code>setPixel</code> у кожному кадрі без потреби. Для великої кількості динамічних точок зазвичай краще використовувати вершини або оновлення текстури блоком.</p>
+<h2>Що обрати</h2>
+<ul>
+<li><code>sf::Shape</code> - прості геометричні об&#x27;єкти.</li>
+<li><code>sf::Sprite</code> - готові картинки і текстури.</li>
+<li><code>sf::Text</code> - написи.</li>
+<li>Вершини - точки, лінії, багато дрібної геометрії.</li>
+<li><code>sf::RenderTexture</code> - проміжна поверхня або кешований шар.</li>
+<li><code>sf::Image</code> - робота з пікселями в пам&#x27;яті.</li>
+</ul>
+<p>У наступному розділі ці об&#x27;єкти будемо використовувати практично: поступово зберемо навчальний проєкт із кулькою, рухом, межами, керуванням і додатковими ефектами.</p></section>
+<nav class="page-nav"><a href="04-struktura-i-tekhnichni-detali.html">Prev 4. Структура і технічні деталі</a><a href="index.html">Index</a><a href="06-navchalnyi-proekt-bazova-kulka.html">Next 6. Навчальний проект: базова кулька</a></nav>
+</div>
+<script src="assets/highlightjs/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

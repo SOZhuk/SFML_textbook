@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2. Створення та запуск першого проєкту SFML</title>
+  <link rel="stylesheet" href="assets/book.css" />
+  <link rel="stylesheet" href="assets/highlightjs/styles/panda-syntax-dark.min.css" />
+</head>
+<body>
+<div class="wrap">
+<nav class="page-nav"><a href="01-nalashtuvannia-seredovyshcha.html">Prev 1. Налаштування середовища</a><a href="index.html">Index</a><a href="03-vstup-i-zahalna-informatsiia.html">Next 3. Вступ і загальна інформація</a></nav>
+<section class="hero">
+<h1>2. Створення та запуск першого проєкту SFML</h1>
+</section>
+<section class="card"><p>Основний навчальний маршрут використовує репозиторій, підготовлений викладачем. У ньому вже є налаштування VS Code, тому не потрібно окремо налаштовувати CMake. Такий проєкт збирається динамічно, а вихідний файл програми займає значно менше місця.</p>
+<h2>Основний маршрут: готовий проєкт</h2>
+<p>Клонуйте готовий  <a href="https://github.com/SOZhuk/SFML_template" target="_blank" rel="noreferrer">репозиторій з шаблоном</a>:</p>
+<pre><code class="language-powershell">git clone https://github.com/SOZhuk/SFML_template.git</code></pre>
+<p>Перейдіть у папку проєкту:</p>
+<pre><code class="language-powershell">cd SFML_template</code></pre>
+<p>Відкрийте її у VS Code:</p>
+<pre><code class="language-powershell">code .</code></pre>
+<p>Переконайтеся, що основний код доступний у <code>src/main.cpp</code>.</p>
+<p>Після цього можна переходити до компіляції і запуску навчального проєкту. Вам достатньо натиснути F5.</p>
+<p>Очікуваний результат: вікно SFML успішно відкривається, і ви готові переходити до технічних деталей роботи програми.</p>
+<h2>Альтернативний маршрут: CMake</h2>
+<p>Для професійної розробки автори бібліотеки SFML рекомендують використовувати утиліту CMake і шаблонний репозиторій. Зауважте, що цей шлях потребує більше налаштувань.</p>
+<h3>Встановлення CMake</h3>
+<p>CMake потрібен для того, щоб VS Code міг налаштувати та зібрати C++ проєкт. На Windows найзручніше встановити його через <code>winget</code>:</p>
+<pre><code class="language-powershell">winget install --id Kitware.CMake -e</code></pre>
+<p>Після встановлення закрийте і знову відкрийте термінал, а потім перевірте, що команда доступна:</p>
+<pre><code class="language-powershell">cmake --version</code></pre>
+<p>Якщо команда не знайдена, перезапустіть VS Code або комп&#x27;ютер, щоб оновився <code>PATH</code>.</p>
+<h3>Розширення VS Code для CMake</h3>
+<p>У VS Code встановіть розширення <strong>CMake Tools</strong> від Microsoft. Його ідентифікатор у Marketplace:</p>
+<pre><code class="language-text">ms-vscode.cmake-tools</code></pre>
+<p>Через командний рядок його можна встановити так:</p>
+<pre><code class="language-powershell">code --install-extension ms-vscode.cmake-tools</code></pre>
+<p>Саме це розширення додає команди <code>CMake: Configure</code>, <code>CMake: Select a Kit</code>, <code>CMake: Build</code> і панель CMake у VS Code.</p>
+<h3>Створення власного репозиторію</h3>
+<p>Відкрийте шаблонний репозиторій:</p>
+<pre><code class="language-text">https://github.com/SFML/cmake-sfml-project</code></pre>
+<p>На GitHub натисніть <strong>Use this template</strong> -&gt; <strong>Create a new repository</strong>. Назвіть репозиторій, наприклад <code>sfml-first-project</code>, і створіть його у своєму GitHub акаунті.</p>
+<p>Після створення скопіюйте адресу свого репозиторію. Вона матиме приблизно такий вигляд:</p>
+<pre><code class="language-text">https://github.com/&lt;ваш-github-логін&gt;/sfml-first-project.git</code></pre>
+<h3>Клонування проєкту</h3>
+<p>Перейдіть у директорію, де будуть зберігатися ваші навчальні проєкти. Наприклад:</p>
+<pre><code class="language-powershell">cd D:\Projects</code></pre>
+<p>Склонуйте свій репозиторій:</p>
+<pre><code class="language-powershell">git clone https://github.com/&lt;ваш-github-логін&gt;/sfml-first-project.git</code></pre>
+<p>Перейдіть у папку проєкту:</p>
+<pre><code class="language-powershell">cd sfml-first-project</code></pre>
+<p>Відкрийте її у VS Code:</p>
+<pre><code class="language-powershell">code .</code></pre>
+<h3>Налаштування CMake Tools</h3>
+<p>Коли VS Code відкриє проєкт, розширення CMake Tools може запропонувати обрати toolkit. У CMake Tools це називається <strong>Kit</strong>.</p>
+<p>Якщо автоматичне вікно не з&#x27;явилося, відкрийте Command Palette:</p>
+<pre><code class="language-text">Ctrl+Shift+P</code></pre>
+<p>Запустіть команду:</p>
+<pre><code class="language-text">CMake: Select a Kit</code></pre>
+<p>Оберіть встановлений компілятор C++. Наприклад:</p>
+<ul>
+<li><code>Visual Studio Build Tools</code> або <code>Visual Studio Community</code>, якщо працюєте з MSVC;</li>
+<li><code>GCC</code> або <code>MinGW</code>, якщо використовуєте MinGW;</li>
+<li><code>Clang</code>, якщо він встановлений окремо.</li>
+</ul>
+<p>Після вибору Kit запустіть налаштування проєкту:</p>
+<pre><code class="language-text">CMake: Configure</code></pre>
+<h3>Перший build</h3>
+<p>Коли конфігурація завершиться без помилок, запустіть збірку:</p>
+<pre><code class="language-text">CMake: Build</code></pre>
+<p>Або скористайтесь кнопкою <strong>Build</strong> на CMake-панелі внизу VS Code.</p>
+<p>Перший build може тривати довше, тому що шаблонний проєкт завантажує і збирає залежності. Якщо збірка завершилась успішно, можна запускати програму з VS Code.</p>
+<p>Працюємо з готовим репозиторієм, підготовленим викладачем. Основний код розміщений у файлі <code>src/main.cpp</code>.</p>
+<p>Послідовність дій:</p>
+<ol>
+<li>Клонуйте <a href="https://github.com/SOZhuk/SFML_template" target="_blank" rel="noreferrer">репозиторій з шаблоном</a>.</li>
+<li>Відкрийте папку проєкту у VS Code.</li>
+<li>Переконайтеся, що основний код доступний у <code>src/main.cpp</code>.</li>
+<li>Запустіть проєкт через <code>F5</code>.</li>
+</ol>
+<p>Очікуваний результат: вікно SFML успішно відкривається, і ви готові переходити до технічних деталей роботи програми.</p></section>
+<nav class="page-nav"><a href="01-nalashtuvannia-seredovyshcha.html">Prev 1. Налаштування середовища</a><a href="index.html">Index</a><a href="03-vstup-i-zahalna-informatsiia.html">Next 3. Вступ і загальна інформація</a></nav>
+</div>
+<script src="assets/highlightjs/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

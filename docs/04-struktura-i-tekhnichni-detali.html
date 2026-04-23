@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4. Структура і технічні деталі</title>
+  <link rel="stylesheet" href="assets/book.css" />
+  <link rel="stylesheet" href="assets/highlightjs/styles/panda-syntax-dark.min.css" />
+</head>
+<body>
+<div class="wrap">
+<nav class="page-nav"><a href="03-vstup-i-zahalna-informatsiia.html">Prev 3. Вступ і загальна інформація</a><a href="index.html">Index</a><a href="05-obiekty-renderinhu.html">Next 5. Об&#x27;єкти рендерінгу</a></nav>
+<section class="hero">
+<h1>4. Структура і технічні деталі</h1>
+</section>
+<section class="card"><p>﻿# 4. Структура і технічні деталі</p>
+<p>Почнемо з мінімальної повної програми. Вона відкриває вікно, створює зелене коло, обробляє закриття вікна і кожен кадр перемальовує сцену.</p>
+<pre><code class="language-cpp">#include &lt;SFML/Graphics.hpp&gt;
+#include &lt;optional&gt;
+
+int main() {
+    sf::RenderWindow window(sf::VideoMode({800, 600}), &quot;SFML 3 works!&quot;);
+    sf::CircleShape shape(100.f);
+    shape.setFillColor(sf::Color::Green);
+
+    while (window.isOpen()) {
+        while (const std::optional event = window.pollEvent()) {
+            // 1. Обробка подій.
+            if (event-&gt;is&lt;sf::Event::Closed&gt;()) {
+                window.close();
+            }
+        }
+
+        // 2. Оновлення стану.
+
+        // 3. Малювання кадру.
+        window.clear();
+        window.draw(shape);
+        window.display();
+    }
+    return 0;
+}</code></pre>
+<h2>Основні типи даних</h2>
+<p>У SFML багато значень передаються не окремими числами, а невеликими типами-обгортками. Простір імен бібліотеки - <code>sf</code>, тому більшість ідентифікаторів використовуються з префіксом <code>sf::</code>.</p>
+<ul>
+<li><code>sf::Vector2u</code> - пара цілих беззнакових чисел. Зручно для розмірів: ширина і висота вікна, розмір текстури.</li>
+<li><code>sf::Vector2i</code> - пара цілих чисел зі знаком. Часто використовується для позиції миші у пікселях.</li>
+<li><code>sf::Vector2f</code> - пара чисел з плаваючою крапкою. Зручно для позиції, швидкості, переміщення і розмірів графічних об&#x27;єктів.</li>
+<li><code>sf::Color</code> - колір. Наприклад, <code>sf::Color::Green</code>, <code>sf::Color::Black</code> або власний колір <code>sf::Color(30, 30, 30)</code>.</li>
+<li><code>sf::Time</code> - проміжок часу. Його можна отримати з <code>sf::Clock</code> і перевести в секунди, мілісекунди або мікросекунди.</li>
+<li><code>sf::Event</code> - подія від операційної системи: закриття вікна, натискання клавіші, рух миші тощо.</li>
+</ul>
+<p>Приклади:</p>
+<pre><code class="language-cpp">sf::Vector2u windowSize{800, 600};
+sf::Vector2i mousePixelPosition{120, 40};
+sf::Vector2f position{100.f, 50.f};
+sf::Vector2f velocity{80.f, 0.f};
+
+position += velocity * 0.5f;</code></pre>
+<p>Тут <code>velocity</code> можна читати як швидкість у пікселях за секунду. Якщо помножити її на <code>0.5f</code>, отримаємо зміщення за половину секунди.</p>
+<h2>Створення вікна</h2>
+<p>Рядок:</p>
+<pre><code class="language-cpp">sf::RenderWindow window(sf::VideoMode({800, 600}), &quot;SFML 3 works!&quot;);</code></pre>
+<p>створює об&#x27;єкт вікна. <code>sf::RenderWindow</code> - це вікно, у яке можна малювати 2D-об&#x27;єкти.</p>
+<p>Перший параметр - відеорежим:</p>
+<pre><code class="language-cpp">sf::VideoMode({800, 600})</code></pre>
+<p>У SFML 3 розмір передається як <code>sf::Vector2u</code>: <code>{800, 600}</code> означає ширину <code>800</code> і висоту <code>600</code> пікселів.</p>
+<p>Другий параметр:</p>
+<pre><code class="language-cpp">&quot;SFML 3 works!&quot;</code></pre>
+<p>це заголовок вікна.</p>
+<p>Коли створюється <code>sf::RenderWindow</code>, SFML просить операційну систему створити справжнє вікно, готує контекст для малювання і внутрішні ресурси, потрібні для показу кадрів. Після цього програма може перевіряти, чи вікно відкрите:</p>
+<pre><code class="language-cpp">while (window.isOpen()) {
+    // головний цикл програми
+}</code></pre>
+<h2>Створення фігури</h2>
+<p>Рядок:</p>
+<pre><code class="language-cpp">sf::CircleShape shape(100.f);</code></pre>
+<p>створює коло радіусом <code>100.f</code> пікселів. Насправді це об&#x27;єкт, який SFML уміє намалювати у вікні.</p>
+<p>Колір задається так:</p>
+<pre><code class="language-cpp">shape.setFillColor(sf::Color::Green);</code></pre>
+<p>З фігурою можна виконувати інші дії:</p>
+<pre><code class="language-cpp">shape.setPosition({40.f, 30.f});
+shape.setRadius(50.f);
+shape.setFillColor(sf::Color(255, 120, 40));
+shape.move({10.f, 0.f});</code></pre>
+<p><code>setPosition</code> задає позицію, <code>setRadius</code> змінює радіус, <code>setFillColor</code> змінює колір, а <code>move</code> зміщує фігуру відносно поточної позиції.</p>
+<h2>Цикл подій</h2>
+<p>Віконна програма має регулярно забирати події з черги операційної системи. У SFML 3 це робиться так:</p>
+<pre><code class="language-cpp">while (const std::optional event = window.pollEvent()) {
+    if (event-&gt;is&lt;sf::Event::Closed&gt;()) {
+        window.close();
+    }
+}</code></pre>
+<p><code>pollEvent()</code> повертає <code>std::optional&lt;sf::Event&gt;</code>. Якщо подія є, ми отримуємо її і обробляємо. Якщо подій більше немає, внутрішній цикл завершується, і програма переходить до оновлення стану та малювання.</p>
+<p>Важливо: коли <code>pollEvent()</code> повертає подію, ця подія забирається з внутрішньої FIFO-черги подій вікна. Тобто наступний виклик <code>pollEvent()</code> уже перевірятиме наступну подію. Якщо ви зчитали подію і нічого з нею не зробили, вона не повернеться назад у чергу - для вашої програми вона фактично пропущена.</p>
+<p><code>event-&gt;is&lt;sf::Event::Closed&gt;()</code> тільки перевіряє тип події. Це зручно для подій без додаткових даних, наприклад для закриття вікна.</p>
+<p>Якщо подія має додаткові дані, використовуйте <code>getIf&lt;T&gt;()</code>.</p>
+<h3>Приклади подій</h3>
+<p>Натискання клавіші:</p>
+<pre><code class="language-cpp">if (const auto* keyPressed = event-&gt;getIf&lt;sf::Event::KeyPressed&gt;()) {
+    if (keyPressed-&gt;scancode == sf::Keyboard::Scan::Escape) {
+        window.close();
+    }
+}</code></pre>
+<p>Клік миші:</p>
+<pre><code class="language-cpp">if (const auto* mousePressed = event-&gt;getIf&lt;sf::Event::MouseButtonPressed&gt;()) {
+    if (mousePressed-&gt;button == sf::Mouse::Button::Left) {
+        sf::Vector2i clickPosition = mousePressed-&gt;position;
+    }
+}</code></pre>
+<p>Рух миші всередині вікна:</p>
+<pre><code class="language-cpp">if (const auto* mouseMoved = event-&gt;getIf&lt;sf::Event::MouseMoved&gt;()) {
+    sf::Vector2i mousePosition = mouseMoved-&gt;position;
+}</code></pre>
+<p>Зміна розміру вікна:</p>
+<pre><code class="language-cpp">if (const auto* resized = event-&gt;getIf&lt;sf::Event::Resized&gt;()) {
+    sf::Vector2u newSize = resized-&gt;size;
+}</code></pre>
+<p>Події - це разові повідомлення. Вони відповідають на питання: &quot;Що щойно сталося?&quot;</p>
+<h2>Перевірка поточного стану</h2>
+<p>Для безперервного руху часто краще перевіряти не подію, а поточний стан клавіатури або миші. Стан відповідає на питання: &quot;Що натиснуто прямо зараз?&quot;</p>
+<p>Приклад для клавіатури:</p>
+<pre><code class="language-cpp">if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
+    shape.move({-1.f, 0.f});
+}
+
+if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
+    shape.move({1.f, 0.f});
+}</code></pre>
+<p>Приклад для миші:</p>
+<pre><code class="language-cpp">if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+}</code></pre>
+<p>Різниця важлива:</p>
+<ul>
+<li>подія <code>KeyPressed</code> виникає в момент натискання;</li>
+<li>стан <code>isKeyPressed</code> можна перевіряти кожен кадр, поки клавіша утримується.</li>
+</ul>
+<h2>Малювання кадру</h2>
+<p>Кожен кадр у SFML зазвичай складається з трьох кроків:</p>
+<pre><code class="language-cpp">window.clear();
+window.draw(shape);
+window.display();</code></pre>
+<p><code>window.clear()</code> очищає область малювання. Якщо колір не вказано, використовується чорний:</p>
+<pre><code class="language-cpp">window.clear(sf::Color::Black);</code></pre>
+<p><code>window.draw(shape)</code> додає фігуру в поточний кадр. У цей момент ми не описуємо &quot;намалюй один піксель&quot;, а передаємо SFML об&#x27;єкт, який треба відобразити.</p>
+<p><code>window.display()</code> показує готовий кадр на екрані. SFML не малює об&#x27;єкти одразу прямо у видиме вікно: команди <code>draw</code> готують кадр у прихованому буфері, а <code>display()</code> завершує кадр і робить цей буфер видимим.</p>
+<p>Важливий порядок:</p>
+<ol>
+<li>спочатку очистити старий кадр;</li>
+<li>потім намалювати всі об&#x27;єкти;</li>
+<li>в кінці показати результат.</li>
+</ol>
+<p>Якщо забути <code>clear</code>, на екрані можуть залишатися сліди попередніх кадрів. Якщо забути <code>display</code>, підготовлений кадр не буде показаний.</p>
+<h2>Час і однакова швидкість руху</h2>
+<p>Якщо рухати об&#x27;єкт на однакову кількість пікселів за кадр, швидкість буде залежати від комп&#x27;ютера. На швидкому комп&#x27;ютері кадрів буде більше, отже об&#x27;єкт рухатиметься швидше. На повільному - повільніше.</p>
+<p>Краще прив&#x27;язувати оновлення стану до реального часу. Для цього SFML має <code>sf::Clock</code> і <code>sf::Time</code>.</p>
+<pre><code class="language-cpp">sf::Clock clock;
+sf::Vector2f position{0.f, 80.f};
+sf::Vector2f velocity{120.f, 0.f}; // пікселів за секунду
+
+while (window.isOpen()) {
+    // Обробка подій тут така сама, як у попередніх прикладах.
+
+    sf::Time elapsed = clock.restart();
+    float dt = elapsed.asSeconds();
+
+    position += velocity * dt;
+    shape.setPosition(position);
+
+    window.clear();
+    window.draw(shape);
+    window.display();
+}</code></pre>
+<p><code>clock.restart()</code> повертає час, який минув від попереднього виклику <code>restart()</code>, і одразу запускає відлік заново.</p>
+<p><code>elapsed.asSeconds()</code> перетворює <code>sf::Time</code> у секунди як <code>float</code>. Якщо між кадрами минуло приблизно 16 мілісекунд, то:</p>
+<pre><code class="language-cpp">sf::Time elapsed = sf::milliseconds(16);
+float seconds = elapsed.asSeconds(); // приблизно 0.016
+auto ms = elapsed.asMilliseconds();  // 16</code></pre>
+<p>Якщо швидкість дорівнює <code>120</code> пікселів за секунду, то за <code>0.016</code> секунди об&#x27;єкт зміститься приблизно на:</p>
+<pre><code class="language-text">120 * 0.016 = 1.92 пікселя</code></pre>
+<p>Так рух лишається близьким за швидкістю на різних комп&#x27;ютерах.</p>
+<p>Рендеринг кадру теж можна обмежувати, наприклад вертикальною синхронізацією або лімітом FPS. Але для логіки руху важливіше не кількість кадрів сама по собі, а те, щоб зміна стану використовувала реальний час між кадрами.</p>
+<h2>Обмеження FPS</h2>
+<p>SFML дозволяє обмежити частоту кадрів після створення вікна:</p>
+<pre><code class="language-cpp">sf::RenderWindow window(sf::VideoMode({800, 600}), &quot;SFML 3 works!&quot;);
+window.setFramerateLimit(60);</code></pre>
+<p><code>setFramerateLimit(60)</code> просить SFML не рендерити швидше ніж приблизно <code>60</code> кадрів за секунду. Це не абсолютно точний таймер, бо залежить від точності системного сну, але для навчального проєкту цього зазвичай достатньо.</p>
+<p>Інший варіант - вертикальна синхронізація:</p>
+<pre><code class="language-cpp">window.setVerticalSyncEnabled(true);</code></pre>
+<p>Вона синхронізує показ кадрів із частотою оновлення монітора. Зазвичай обирають один підхід: або <code>setFramerateLimit</code>, або <code>setVerticalSyncEnabled</code>, а не обидва одночасно.</p>
+<h2>Підрахунок поточного FPS</h2>
+<p>FPS - це кількість кадрів за секунду. Його можна порахувати вручну: рахуємо кадри, накопичуємо час і раз на секунду оновлюємо значення.</p>
+<pre><code class="language-cpp">#include &lt;SFML/Graphics.hpp&gt;
+#include &lt;optional&gt;
+#include &lt;string&gt;
+
+int main() {
+    sf::RenderWindow window(sf::VideoMode({800, 600}), &quot;SFML 3 works!&quot;);
+    window.setFramerateLimit(60);
+
+    sf::CircleShape shape(100.f);
+    shape.setFillColor(sf::Color::Green);
+
+    sf::Clock fpsClock;
+    unsigned int frameCount = 0;
+
+    while (window.isOpen()) {
+        while (const std::optional event = window.pollEvent()) {
+            if (event-&gt;is&lt;sf::Event::Closed&gt;()) {
+                window.close();
+            }
+        }
+
+        window.clear();
+        window.draw(shape);
+        window.display();
+
+        frameCount++;
+
+        sf::Time elapsed = fpsClock.getElapsedTime();
+        if (elapsed &gt;= sf::seconds(1.f)) {
+            float fps = static_cast&lt;float&gt;(frameCount) / elapsed.asSeconds();
+            window.setTitle(&quot;FPS: &quot; + std::to_string(static_cast&lt;int&gt;(fps)));
+
+            frameCount = 0;
+            fpsClock.restart();
+        }
+    }
+
+    return 0;
+}</code></pre>
+<p>Тут <code>frameCount</code> збільшується після кожного <code>display()</code>, тобто після завершення кадру. Коли минула приблизно одна секунда, ми ділимо кількість кадрів на реальний час у секундах і отримуємо поточний FPS.</p></section>
+<nav class="page-nav"><a href="03-vstup-i-zahalna-informatsiia.html">Prev 3. Вступ і загальна інформація</a><a href="index.html">Index</a><a href="05-obiekty-renderinhu.html">Next 5. Об&#x27;єкти рендерінгу</a></nav>
+</div>
+<script src="assets/highlightjs/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

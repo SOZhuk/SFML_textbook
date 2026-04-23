@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6. Навчальний проект: базова кулька</title>
+  <link rel="stylesheet" href="assets/book.css" />
+  <link rel="stylesheet" href="assets/highlightjs/styles/panda-syntax-dark.min.css" />
+</head>
+<body>
+<div class="wrap">
+<nav class="page-nav"><a href="05-obiekty-renderinhu.html">Prev 5. Об&#x27;єкти рендерінгу</a><a href="index.html">Index</a><a href="07-navchalnyi-proekt-pole-kolir-i-keruvannia.html">Next 7. Навчальний проект: поле, колір і керування</a></nav>
+<section class="hero">
+<h1>6. Навчальний проект: базова кулька</h1>
+</section>
+<section class="card"><p>Починаємо з маленьких кроків. Після кожного кроку проєкт має компілюватися і запускатися. Якщо щось пішло не так, легше повернутися на один крок назад, ніж шукати помилку у великому файлі.</p>
+<p>Працюємо в одному файлі <code>src/main.cpp</code>. Для першого графічного проєкту це нормально: головне зараз зрозуміти цикл програми, стан об&#x27;єкта і малювання кадру.</p>
+<p>Далі проєкт буде рости поступово: від однієї кульки до поля, керування, кількох об&#x27;єктів і додаткових графічних ефектів. Не копіюйте великі готові приклади одразу: краще додавати одну зміну і одразу перевіряти результат.</p>
+<h2>Крок 0. Вікно і порожній цикл</h2>
+<p>Почніть із мінімальної програми. Вона тільки відкриває вікно і дозволяє його закрити.</p>
+<pre><code class="language-cpp">#include &lt;SFML/Graphics.hpp&gt;
+#include &lt;optional&gt;
+
+int main() {
+    sf::RenderWindow window(sf::VideoMode({800, 600}), &quot;SFML lesson&quot;);
+    window.setFramerateLimit(60);
+
+    while (window.isOpen()) {
+        while (const std::optional event = window.pollEvent()) {
+            if (event-&gt;is&lt;sf::Event::Closed&gt;()) {
+                window.close();
+            }
+        }
+
+        window.clear(sf::Color(30, 30, 30));
+        window.display();
+    }
+
+    return 0;
+}</code></pre>
+<p>Проміжний результат: відкривається темне вікно 800x600, кнопка закриття працює.</p>
+<p>Спробуйте ще: змініть заголовок вікна або колір у <code>window.clear(...)</code>.</p>
+<h2>Крок 1. Одна кулька</h2>
+<p>Додайте кульку перед головним циклом:</p>
+<pre><code class="language-cpp">sf::CircleShape ball(30.f);
+ball.setPosition({100.f, 100.f});
+ball.setFillColor(sf::Color::Green);</code></pre>
+<p>У частині малювання додайте:</p>
+<pre><code class="language-cpp">window.draw(ball);</code></pre>
+<p>Повний порядок малювання має бути таким:</p>
+<pre><code class="language-cpp">window.clear(sf::Color(30, 30, 30));
+window.draw(ball);
+window.display();</code></pre>
+<p>Проміжний результат: у вікні видно зелену кульку.</p>
+<p>Спробуйте ще: змініть радіус, позицію або колір кульки.</p>
+<h2>Крок 2. Стан кульки</h2>
+<p>Поки що позиція і колір заховані всередині <code>ball</code>. Для руху зручніше явно зберігати стан у змінних.</p>
+<p>Перед створенням кульки додайте:</p>
+<pre><code class="language-cpp">float radius = 30.f;
+sf::Vector2f position{100.f, 100.f};
+sf::Vector2f velocity{160.f, 120.f};
+sf::Color color = sf::Color::Green;</code></pre>
+<p>Створення кульки тепер можна записати так:</p>
+<pre><code class="language-cpp">sf::CircleShape ball(radius);
+ball.setPosition(position);
+ball.setFillColor(color);</code></pre>
+<p>Проміжний результат поки не зміниться. Але код готовий до руху: у нас уже є позиція, швидкість, радіус і колір.</p>
+<p>Спробуйте ще: змініть <code>velocity</code> і передбачте, у який бік мала б рухатися кулька.</p>
+<h2>Крок 3. Час кадру</h2>
+<p>Щоб рух не залежав від швидкості комп&#x27;ютера, додайте годинник перед головним циклом:</p>
+<pre><code class="language-cpp">sf::Clock clock;</code></pre>
+<p>На початку кожного кадру, вже всередині <code>while (window.isOpen())</code>, отримайте час кадру:</p>
+<pre><code class="language-cpp">float dt = clock.restart().asSeconds();</code></pre>
+<p><code>dt</code> - це кількість секунд, яка минула від попереднього кадру. На 60 FPS це приблизно <code>0.016</code>.</p>
+<p>Проміжний результат візуально ще не зміниться. Ми тільки підготували правильну основу для руху.</p>
+<h2>Крок 4. Рух</h2>
+<p>У частині <code>Оновлення стану</code> додайте:</p>
+<pre><code class="language-cpp">position += velocity * dt;
+ball.setPosition(position);</code></pre>
+<p>Тепер логіка кадру виглядає так:</p>
+<pre><code class="language-cpp">float dt = clock.restart().asSeconds();
+
+// 1. Обробка подій.
+
+// 2. Оновлення стану.
+position += velocity * dt;
+ball.setPosition(position);
+
+// 3. Малювання кадру.</code></pre>
+<p>Проміжний результат: кулька рухається, але з часом вилітає за межі вікна.</p>
+<p>Спробуйте ще: зробіть рух повільнішим або швидшим, змінивши <code>velocity</code>.</p>
+<h2>Крок 5. Відбивання від меж вікна</h2>
+<p>Додайте сталі розміри вікна поруч зі змінними стану:</p>
+<pre><code class="language-cpp">const float windowWidth = 800.f;
+const float windowHeight = 600.f;</code></pre>
+<p>Після оновлення позиції додайте перевірку меж:</p>
+<pre><code class="language-cpp">if (position.x &lt;= 0.f) {
+    position.x = 0.f;
+    velocity.x = -velocity.x;
+}
+
+if (position.x + 2.f * radius &gt;= windowWidth) {
+    position.x = windowWidth - 2.f * radius;
+    velocity.x = -velocity.x;
+}
+
+if (position.y &lt;= 0.f) {
+    position.y = 0.f;
+    velocity.y = -velocity.y;
+}
+
+if (position.y + 2.f * radius &gt;= windowHeight) {
+    position.y = windowHeight - 2.f * radius;
+    velocity.y = -velocity.y;
+}
+
+ball.setPosition(position);</code></pre>
+<p>Проміжний результат: кулька рухається і відбивається від країв вікна.</p>
+<p>Спробуйте ще: змініть радіус кульки і перевірте, чи вона все одно правильно відбивається.</p>
+<h2>Контрольна точка</h2>
+<p>Після цієї сторінки у вас має бути програма, де:</p>
+<ul>
+<li>відкривається вікно;</li>
+<li>у вікні є кулька;</li>
+<li>кулька рухається;</li>
+<li>кулька відбивається від країв.</li>
+</ul>
+<p>Це перший робочий результат. Далі будемо додавати колір, поле, керування і лічильники.</p></section>
+<nav class="page-nav"><a href="05-obiekty-renderinhu.html">Prev 5. Об&#x27;єкти рендерінгу</a><a href="index.html">Index</a><a href="07-navchalnyi-proekt-pole-kolir-i-keruvannia.html">Next 7. Навчальний проект: поле, колір і керування</a></nav>
+</div>
+<script src="assets/highlightjs/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
