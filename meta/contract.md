@@ -29,6 +29,10 @@
 - Keep shared book styles in `docs/assets/book.css`.
 - Do not depend on `temp/` at runtime.
 
+## Build rules
+
+- For manual Windows builds, prefer `scripts\build-book.cmd`; it wraps the PowerShell script with a process-local execution policy bypass.
+
 ## Maintenance rules
 
 - Update `meta/` after each iteration.

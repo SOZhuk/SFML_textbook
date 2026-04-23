@@ -14,6 +14,9 @@
 git clone https://github.com/SOZhuk/SFML_template.git
 ```
 
+Якщо вам потрібна допомога по командам git, можете скористатись [довідником](https://git-practicum-a22961.gitlab.io/git-practicum.html)
+
+
 Перейдіть у папку проєкту:
 
 ```powershell

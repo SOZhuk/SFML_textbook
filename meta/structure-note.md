@@ -30,6 +30,7 @@ The repository now includes a minimal source scaffold alongside the published `d
   `09-dodatkovi-idei-indykatory-spraity-i-fon.html`.
 - `src/book/chapter-01/` contains the chapter source parts.
 - `scripts/build-book.py` regenerates the overview page and the standalone pages.
+- `scripts/build-book.cmd` is the recommended Windows entry point for manual builds because it runs `scripts/build-book.ps1` with a process-local PowerShell execution policy bypass.
 - `scripts/build-book.py` now reads index and page headings from markdown `# ...` lines, so user-visible titles are content-driven.
 - `scripts/build-book.py` now takes page order from the numbered list in `src/book/chapter-01.md` and resolves files by numeric filename prefix in `src/book/chapter-01/`.
 - `docs/assets/highlightjs/` holds the published highlight.js assets used by the generated pages.

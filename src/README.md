@@ -8,3 +8,13 @@ This directory is the authoring space for book content.
 - `styles/` stores shared CSS extracted from `docs/`.
 
 The published site in `docs/` is generated output.
+
+## Build
+
+On Windows, run the build through the command wrapper:
+
+```cmd
+scripts\build-book.cmd
+```
+
+The wrapper launches `scripts/build-book.ps1` with a process-local execution policy bypass, so it does not require changing the system-wide PowerShell policy.
