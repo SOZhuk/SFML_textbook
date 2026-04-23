@@ -45,6 +45,10 @@ def render_markdown(source: str, drop_first_h1: bool = False) -> str:
     in_details = False
     details_title = ""
     details_lines: list[str] = []
+    in_callout = False
+    callout_kind = "note"
+    callout_title = ""
+    callout_lines: list[str] = []
     first_h1_dropped = False
 
     def flush_list() -> None:
@@ -65,9 +69,27 @@ def render_markdown(source: str, drop_first_h1: bool = False) -> str:
             details_title = ""
             details_lines = []
 
+    def flush_callout() -> None:
+        nonlocal in_callout, callout_kind, callout_title, callout_lines
+        if in_callout:
+            callout_body = render_markdown("\n".join(callout_lines))
+            title = f'<strong class="note-title">{inline(callout_title)}</strong>' if callout_title else ""
+            body.append(f'<aside class="note note-{callout_kind}">{title}{callout_body}</aside>')
+            in_callout = False
+            callout_kind = "note"
+            callout_title = ""
+            callout_lines = []
+
     for line in lines:
         raw = line.rstrip()
         check = raw.lstrip()
+
+        if in_callout:
+            if check == ":::":
+                flush_callout()
+            else:
+                callout_lines.append(raw)
+            continue
 
         if in_details:
             if check == ":::":
@@ -97,6 +119,15 @@ def render_markdown(source: str, drop_first_h1: bool = False) -> str:
             in_details = True
             details_title = check[len(":::details") :].strip() or "Додаткові команди"
             details_lines = []
+            continue
+
+        callout_match = re.match(r"^:::(note|warning)\b(.*)$", check)
+        if callout_match:
+            flush_list()
+            in_callout = True
+            callout_kind = callout_match.group(1)
+            callout_title = callout_match.group(2).strip()
+            callout_lines = []
             continue
 
         if not check:
@@ -136,6 +167,7 @@ def render_markdown(source: str, drop_first_h1: bool = False) -> str:
     if in_pre:
         body.append(f'<pre><code class="language-{pre_lang}">{html.escape(chr(10).join(pre_lines))}</code></pre>')
     flush_details()
+    flush_callout()
     return "\n".join(body)
 
 

@@ -125,6 +125,20 @@ pre code {
   border-radius: 10px;
   margin: 12px 0;
 }
+.note > :first-child {
+  margin-top: 0;
+}
+.note > :last-child {
+  margin-bottom: 0;
+}
+.note-title {
+  display: block;
+  margin-bottom: 4px;
+}
+.note-warning {
+  border-left-color: #d97706;
+  background: #fff7ed;
+}
 .details-block {
   border: 1px solid var(--border);
   border-radius: 10px;
