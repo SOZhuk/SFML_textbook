@@ -20,25 +20,29 @@
 <li>чи встановлений Visual Studio Code і рекомендовані розширення для C++;</li>
 <li>чи компілюється і запускається мінімальна програма <code>Hello, world!</code>.</li>
 </ol>
-<h2>1. Перевірка компілятора</h2>
+<aside class="note note-warning"><strong class="note-title">Увага</strong><p>Створюйте навчальні проєкти в папках без кириличних літер у шляху, наприклад <code>D:\Projects</code>. Шлях з кирилицею може спричинити помилки збірки або запуску.</p></aside>
+<h2 id="compiler-check">1. Перевірка компілятора</h2>
 <p>Відкрийте PowerShell, командний рядок (cmd) або термінал VS Code і виконайте:</p>
 <pre><code class="language-powershell">g++ --version</code></pre>
-<p>Очікуваний перший рядок:</p>
+<p>Приклад очікуваного першого рядка:</p>
 <pre><code class="language-text">g++.exe (Rev13, Built by MSYS2 project) 15.2.0</code></pre>
-<p>Якщо версія збігається, компілятор уже готовий. Якщо команда <code>g++</code> не знайдена або версія інша, перевірте, який саме компілятор запускається:</p>
+<p>Номер версії може відрізнятися. Важливо, щоб команда <code>g++</code> була доступна і запускалася саме з середовища MSYS2 UCRT64. Перевірте, який саме компілятор запускається:</p>
 <pre><code class="language-powershell">where g++</code></pre>
 <p>Для цього курсу потрібен компілятор із середовища MSYS2 UCRT64. Його шлях зазвичай такий:</p>
 <pre><code class="language-text">C:\msys64\ucrt64\bin</code></pre>
-<h3>Встановлення MSYS2 і toolchain</h3>
+<p>Перевірка пройдена, якщо <code>g++ --version</code> виводить версію компілятора, а <code>where g++</code> показує шлях із <code>C:\msys64\ucrt64\bin</code>.</p>
+<details class="details-block"><summary>Що робити, якщо перевірка компілятора не пройшла</summary><div class="details-body"><p>Якщо перевірка не пройшла, встановіть MSYS2 і toolchain нижче, додайте <code>C:\msys64\ucrt64\bin</code> до <code>Path</code>, закрийте і знову відкрийте PowerShell або VS Code, а потім повторіть цю перевірку.</p>
+<p>Після виправлення поверніться до <a href="#compiler-check">перевірки компілятора</a>.</p></div></details>
+<h3 id="msys2-install">Встановлення MSYS2 і toolchain</h3>
 <p>Якщо MSYS2 ще не встановлений, встановіть його:</p>
 <pre><code class="language-powershell">winget install --id MSYS2.MSYS2 -e</code></pre>
-<p>Після встановлення відкрийте з меню Start саме <strong>MSYS2 UCRT64</strong>, не звичайний MSYS2 Shell, або просто запустіть з командного рядку C:\msys64\ucrt64. У цьому вікні виконайте:</p>
+<p>Після встановлення відкрийте з меню Start саме <strong>MSYS2 UCRT64</strong>, не звичайний MSYS2 Shell. У цьому вікні виконайте:</p>
 <pre><code class="language-bash">pacman -Syu</code></pre>
 <p>Якщо MSYS2 попросить закрити термінал після оновлення, закрийте його, знову відкрийте <strong>MSYS2 UCRT64</strong> і виконайте:</p>
 <pre><code class="language-bash">pacman -Syu
 pacman -S --needed mingw-w64-ucrt-x86_64-toolchain</code></pre>
 <p>Після встановлення додайте шлях <code>C:\msys64\ucrt64\bin</code> до змінної середовища <code>Path</code>.</p>
-<h3>Як додати шлях до Path у Windows</h3>
+<h3 id="path-setup">Як додати шлях до Path у Windows</h3>
 <p>Готовий <code>.cmd</code> файл нижче може додати <code>C:\msys64\ucrt64\bin</code> у користувацький <code>Path</code> автоматично. Після цього все одно потрібно закрити і знову відкрити PowerShell, cmd або VS Code, бо вже запущені програми не перечитують змінні середовища.</p>
 <p>Якщо автоматичне додавання не спрацювало, додайте шлях вручну:</p>
 <ol>
@@ -94,27 +98,33 @@ echo.
 echo Done.
 echo Restart PowerShell, cmd, and VS Code so they can read the updated Path.</code></pre>
 <p>Якщо після першої команди <code>pacman -Syu</code> MSYS2 просить закрити вікно, закрийте його і запустіть <code>.cmd</code> файл ще раз.</p></div></details>
-<h2>2. Встановлення бібліотеки SFML</h2>
+<h2 id="sfml-install">2. Встановлення бібліотеки SFML</h2>
 <p>Цей крок потрібен, якщо ви будете збирати SFML-проєкт локально через MSYS2 UCRT64 або через підготовлений викладачем шаблон, який очікує встановлену бібліотеку в системі.</p>
 <p>Якщо ви створюєте проєкт через клон офіційного репозиторію <code>SFML/cmake-sfml-project</code> і CMake, окремо встановлювати SFML через <code>pacman</code> не обов&#x27;язково: CMake-шаблон може завантажити і підключити бібліотеку під час налаштування проєкту.</p>
 <p>Для встановлення SFML відкрийте <strong>MSYS2 UCRT64</strong> і виконайте:</p>
 <pre><code class="language-bash">pacman -S --needed mingw-w64-ucrt-x86_64-sfml</code></pre>
 <p>Для повністю автоматичного встановлення можна використати:</p>
 <pre><code class="language-bash">pacman -S --needed --noconfirm mingw-w64-ucrt-x86_64-sfml</code></pre>
-<h2>3. Перевірка Visual Studio Code</h2>
+<p>Перевірка пройдена, якщо команда завершилася без помилок і пакет SFML встановлений.</p>
+<details class="details-block"><summary>Що робити, якщо SFML не встановлюється</summary><div class="details-body"><p>Якщо <code>pacman</code> повідомляє про помилки, повторіть команду в <strong>MSYS2 UCRT64</strong> після оновлення системи через <code>pacman -Syu</code>.</p>
+<p>Після виправлення поверніться до <a href="#sfml-install">встановлення бібліотеки SFML</a>.</p></div></details>
+<h2 id="vscode-check">3. Перевірка Visual Studio Code</h2>
 <p>Знайдіть значок <strong>Visual Studio Code</strong> у меню Start або спробуйте запустити редактор із командного рядка:</p>
 <pre><code class="language-powershell">code</code></pre>
 <p>Якщо VS Code не встановлений, встановіть його через <code>winget</code>:</p>
 <pre><code class="language-powershell">winget install --id Microsoft.VisualStudioCode -e</code></pre>
 <p>Після встановлення закрийте і знову відкрийте PowerShell. Перевірте:</p>
 <pre><code class="language-powershell">code --version</code></pre>
+<p>Перевірка пройдена, якщо команда вивела номер версії VS Code.</p>
+<details class="details-block"><summary>Що робити, якщо команда code не знайдена</summary><div class="details-body"><p>Якщо команда <code>code</code> не знайдена, перезапустіть PowerShell або VS Code після встановлення. Якщо це не допомогло, відкрийте VS Code з меню Start і перевірте, що під час встановлення було увімкнено додавання <code>code</code> до <code>PATH</code>.</p>
+<p>Після виправлення поверніться до <a href="#vscode-check">перевірки Visual Studio Code</a>.</p></div></details>
 <h3>Рекомендоване розширення для C++</h3>
 <p>У VS Code встановіть <strong>C/C++ Extension Pack</strong> від Microsoft. Ідентифікатор розширення:</p>
 <pre><code class="language-text">ms-vscode.cpptools-extension-pack</code></pre>
 <p>Його можна встановити через вкладку Extensions або командою:</p>
 <pre><code class="language-powershell">code --install-extension ms-vscode.cpptools-extension-pack</code></pre>
 <p>Цей пакет додає підтримку C/C++, підказки коду, налагодження та інструменти, які знадобляться для роботи з проєктами C++.</p>
-<h2>4. Компіляція і запуск Hello World</h2>
+<h2 id="hello-world-check">4. Компіляція і запуск Hello World</h2>
 <p>Створіть окрему папку для перевірки, наприклад:</p>
 <pre><code class="language-powershell">mkdir cpp-check
 cd cpp-check
@@ -132,6 +142,9 @@ int main() {
 <pre><code class="language-powershell">.\main.exe</code></pre>
 <p>Очікуваний результат:</p>
 <pre><code class="language-text">Hello, world!</code></pre>
+<p>Перевірка пройдена, якщо програма компілюється без помилок і в терміналі з&#x27;являється <code>Hello, world!</code>.</p>
+<details class="details-block"><summary>Що робити, якщо Hello World не компілюється або не запускається</summary><div class="details-body"><p>Якщо компіляція не пройшла, поверніться до <a href="#compiler-check">перевірки компілятора</a> і переконайтеся, що <code>where g++</code> показує <code>C:\msys64\ucrt64\bin</code>. Якщо запуск <code>.\main.exe</code> не працює, перевірте, чи файл <code>main.exe</code> створився в поточній папці.</p>
+<p>Після виправлення поверніться до <a href="#hello-world-check">компіляції і запуску Hello World</a>.</p></div></details>
 <p>Якщо програма компілюється і запускається, середовище готове до роботи з навчальним проєктом SFML.</p></section>
 <nav class="page-nav"><a href="index.html">Index</a><a href="02-pershyi-proiekt-sfml.html">Next 2. Створення та запуск першого проєкту SFML</a></nav>
 </div>

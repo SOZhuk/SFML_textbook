@@ -134,10 +134,33 @@ pre code {
 .note-title {
   display: block;
   margin-bottom: 4px;
+  font-weight: 700;
 }
 .note-warning {
-  border-left-color: #d97706;
-  background: #fff7ed;
+  border: 2px solid #f59e0b;
+  border-left: 8px solid #b45309;
+  background: #fffbeb;
+  box-shadow: 0 8px 24px rgba(180, 83, 9, 0.16);
+  color: #451a03;
+  margin: 18px 0;
+  padding: 14px 16px;
+}
+.note-warning .note-title {
+  color: #92400e;
+  font-size: 1.05rem;
+}
+.note-warning .note-title::before {
+  content: "!";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35em;
+  height: 1.35em;
+  margin-right: 8px;
+  border-radius: 999px;
+  background: #b45309;
+  color: #ffffff;
+  font-weight: 700;
 }
 .details-block {
   border: 1px solid var(--border);

@@ -140,7 +140,7 @@ if (velocity.y &lt; -maxSpeed) velocity.y = -maxSpeed;</code></pre>
 <p>Це саме події, а не стан клавіатури: дія виконується один раз у момент натискання.</p>
 <h2>Крок 10. Текстовий лічильник у вікні</h2>
 <p>Щоб показати текст прямо у вікні, потрібен файл шрифту. Завантажте <a href="static/fonts/NotoSans-Regular.ttf" target="_blank" rel="noreferrer">NotoSans-Regular.ttf</a> або весь <a href="static/assets.zip" target="_blank" rel="noreferrer">набір навчальних файлів</a>, створіть у своєму C++ проєкті папку <code>assets</code> і покладіть шрифт туди.</p>
-<aside class="note note-warning"><strong class="note-title">Увага</strong><p>Шлях <code>assets/NotoSans-Regular.ttf</code> рахується від робочої директорії, з якої запускається програма. Якщо файл існує, але SFML його не знаходить, перевірте, звідки саме запускається <code>.exe</code>: зазвичай найпростіше покласти папку <code>assets</code> у корінь проєкту і запускати програму з цього кореня.</p></aside>
+<aside class="note note-warning"><strong class="note-title">Увага</strong><p>Папка <code>assets</code> має бути там, звідки запускається <code>.exe</code>. Якщо шрифт не завантажується, спочатку перевірте робочу директорію запуску програми.</p></aside>
 <pre><code class="language-cpp">sf::Font font(&quot;assets/NotoSans-Regular.ttf&quot;);
 sf::Text label(font, &quot;Bounces: 0&quot;, 24);
 label.setPosition({20.f, 20.f});</code></pre>

@@ -22,7 +22,9 @@ def inline(text: str) -> str:
     text = re.sub(
         r"\[(.+?)\]\((.+?)\)",
         lambda m: stash(
-            f'<a href="{html.escape(m.group(2), quote=True)}" target="_blank" rel="noreferrer">{html.escape(m.group(1))}</a>'
+            f'<a href="{html.escape(m.group(2), quote=True)}">{html.escape(m.group(1))}</a>'
+            if m.group(2).startswith("#")
+            else f'<a href="{html.escape(m.group(2), quote=True)}" target="_blank" rel="noreferrer">{html.escape(m.group(1))}</a>'
         ),
         text,
     )
@@ -33,6 +35,15 @@ def inline(text: str) -> str:
     for i, value in enumerate(placeholders):
         text = text.replace(f"@@P{i}@@", value)
     return text
+
+
+def heading_html(level: int, text: str) -> str:
+    match = re.match(r"^(.*?)\s+\{#([A-Za-z0-9_-]+)\}$", text)
+    if match:
+        title = match.group(1).strip()
+        anchor = html.escape(match.group(2), quote=True)
+        return f'<h{level} id="{anchor}">{inline(title)}</h{level}>'
+    return f"<h{level}>{inline(text)}</h{level}>"
 
 
 def render_markdown(source: str, drop_first_h1: bool = False) -> str:
@@ -140,13 +151,13 @@ def render_markdown(source: str, drop_first_h1: bool = False) -> str:
                 flush_list()
                 continue
             flush_list()
-            body.append(f"<h1>{inline(check[2:].strip())}</h1>")
+            body.append(heading_html(1, check[2:].strip()))
         elif check.startswith("## "):
             flush_list()
-            body.append(f"<h2>{inline(check[3:].strip())}</h2>")
+            body.append(heading_html(2, check[3:].strip()))
         elif check.startswith("### "):
             flush_list()
-            body.append(f"<h3>{inline(check[4:].strip())}</h3>")
+            body.append(heading_html(3, check[4:].strip()))
         elif check.startswith("- "):
             if in_list != "ul":
                 flush_list()

@@ -42,6 +42,7 @@ The repository now includes a minimal source scaffold alongside the published `d
 - Ordered-list rendering now strips markdown numeric prefixes from list item text to avoid doubled numbering in HTML.
 - Lesson markdown supports collapsible blocks with `:::details Title` ... `:::`; the generator renders them as HTML `<details>` blocks.
 - Lesson markdown supports callout blocks with `:::note Title` ... `:::` and `:::warning Title` ... `:::`; the generator renders them as styled `<aside>` panels using `.note` variants.
+- Lesson markdown supports explicit heading anchors with `## Heading {#anchor-id}` and same-page links to those anchors.
 - Chapter 1 now has nine standalone lesson pages. The former large page 6 was split into pages 6-9:
   `06-navchalnyi-proekt-bazova-kulka.md`,
   `07-navchalnyi-proekt-pole-kolir-i-keruvannia.md`,
