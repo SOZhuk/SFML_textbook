@@ -6,6 +6,7 @@
 - Do not place workflow notes, repository notes, or build planning inside lesson content.
 - Keep all user-facing headings and page labels in markdown content.
 - Lesson markdown may use callout blocks with `:::note Title` ... `:::` and `:::warning Title` ... `:::`. The generator renders them as styled note panels.
+- Warning callouts must stay visually stronger than regular notes and details blocks, with high contrast in every supported theme.
 - Lesson headings may use explicit anchors with `## Heading {#anchor-id}`. Internal links such as `[text](#anchor-id)` stay on the same page.
 - Keep the published output in `docs/`.
 - Preserve `docs/backup/index.html` as the manual reference copy.
@@ -27,8 +28,17 @@
 ## Asset rules
 
 - Keep syntax highlighting assets in `docs/assets/highlightjs/`.
-- Keep shared book styles in `docs/assets/book.css`.
+- Keep source styles in `src/styles/book.css`.
+- Keep shared generated book styles in `docs/assets/book.css`; do not edit this generated copy directly.
+- Keep global page shell behavior in `src/templates/page.html`, including the theme toggle.
 - Do not depend on `temp/` at runtime.
+
+## Design and theme rules
+
+- The book supports two themes through `data-theme="noir"` and `data-theme="graphite"`.
+- The initial theme follows `prefers-color-scheme` unless `localStorage["book-theme"]` contains a manual override.
+- The theme toggle is a single icon button in the shared template. Do not place theme controls in lesson markdown.
+- The shared CSS uses variables for colors, warning treatment, and asymmetric shape radii. Preserve readability for code-heavy student lessons.
 
 ## Build rules
 

@@ -20,7 +20,8 @@ The repository now includes a minimal source scaffold alongside the published `d
 ## Current state
 
 - `docs/backup/index.html` preserves the original page for reference.
-- `docs/index.html` is the main overview page.
+- `docs/index.html` is the generated main overview page.
+- `docs/` is generated from `src/`; do not edit generated HTML or `docs/assets/book.css` by hand.
 - Standalone lesson pages are generated with numbered names based on source markdown basenames:
   `01-nalashtuvannia-seredovyshcha.html`, `02-pershyi-proiekt-sfml.html`,
   `03-vstup-i-zahalna-informatsiia.html`, `04-struktura-i-tekhnichni-detali.html`,
@@ -34,11 +35,11 @@ The repository now includes a minimal source scaffold alongside the published `d
 - `scripts/build-book.py` now reads index and page headings from markdown `# ...` lines, so user-visible titles are content-driven.
 - `scripts/build-book.py` now takes page order from the numbered list in `src/book/chapter-01.md` and resolves files by numeric filename prefix in `src/book/chapter-01/`.
 - `docs/assets/highlightjs/` holds the published highlight.js assets used by the generated pages.
-- Shared page styles are delivered from `docs/assets/book.css` (external CSS, no inline style block).
+- Shared page styles are sourced from `src/styles/book.css` and delivered as generated `docs/assets/book.css`.
 - `prompts.md` contains short prefix prompts for safer future instructions.
 - `meta/contract.md` defines the current content and page rules.
 - Standalone pages now render a single `H1` only (no duplicated heading inside the content card).
-- Standalone page navigation is now compact and rendered as one-line pill links with horizontal overflow.
+- Standalone page navigation is compact, horizontally scrollable, and styled with aggressive asymmetric control radii.
 - Ordered-list rendering now strips markdown numeric prefixes from list item text to avoid doubled numbering in HTML.
 - Lesson markdown supports collapsible blocks with `:::details Title` ... `:::`; the generator renders them as HTML `<details>` blocks.
 - Lesson markdown supports callout blocks with `:::note Title` ... `:::` and `:::warning Title` ... `:::`; the generator renders them as styled `<aside>` panels using `.note` variants.
@@ -49,4 +50,8 @@ The repository now includes a minimal source scaffold alongside the published `d
   `08-navchalnyi-proekt-kilka-kulok.md`,
   `09-dodatkovi-idei-indykatory-spraity-i-fon.md`.
 - Pages 6-9 are step-by-step student worksheets with incremental snippets, intermediate results, and extension tasks. Public downloadable teaching assets live in `docs/static/`, including simple sprites with opaque green key-color backgrounds, a star background, a Noto Sans font, and five `docs/static/animation/octopus*.png` frames with normalized green key color.
-- Main index links are now visually decorated as menu cards (accent border, hover state, focus-visible style).
+- Main index links are now asymmetric menu controls with accent borders, strong hover states, and focus-visible styling.
+- The current design system has two themes: Noir Amber and Graphite School.
+- The shared template includes one day/night icon theme toggle. It defaults from browser `prefers-color-scheme` and stores manual choices in `localStorage`.
+- Shape is controlled through CSS variables such as `--radius-panel`, `--radius-control`, `--radius-code`, `--radius-warning`, and `--radius-marker`.
+- Warning blocks are intentionally more prominent than regular notes/details and use dedicated warning color variables per theme.

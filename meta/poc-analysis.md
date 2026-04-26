@@ -1,5 +1,9 @@
 # POC Analysis: Minimal-Change Content Generation Workflow
 
+## Usage note
+
+This file is historical context only. Do not read it during routine implementation or planning unless the task specifically concerns the original PoC, early architecture decisions, or repository history. For current rules, use `meta/contract.md`, `meta/structure-note.md`, and `meta/design-system.md`.
+
 ## Current repository structure
 
 - `docs/index.html` is the only tracked site artifact in the repository.
@@ -142,3 +146,7 @@
 - `meta/contract.md` records the current page and asset rules.
 - Standalone pages now keep one page-level `H1` and omit duplicate content-level `H1`.
 - Navigation pills were tightened for compact horizontal usage.
+
+## Final status note
+
+This document is kept as historical PoC analysis. The current implementation has moved beyond the initial one-page proof of concept: the book is now a generated multi-page static textbook with source markdown in `src/book/`, a shared template in `src/templates/page.html`, shared source styles in `src/styles/book.css`, generated output in `docs/`, and a two-theme Noir/Graphite design system documented separately in `meta/design-system.md`.
