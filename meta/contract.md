@@ -2,51 +2,43 @@
 
 ## Content rules
 
-- Keep lesson text in the source chapter parts.
-- Do not place workflow notes, repository notes, or build planning inside lesson content.
-- Keep all user-facing headings and page labels in markdown content.
-- Lesson markdown may use callout blocks with `:::note Title` ... `:::` and `:::warning Title` ... `:::`. The generator renders them as styled note panels.
-- Lesson markdown may nest `:::details`, `:::note`, and `:::warning` blocks inside one another when a troubleshooting block needs a collapsible subsection.
-- Warning callouts must stay visually stronger than regular notes and details blocks, with high contrast in every supported theme.
-- Lesson headings may use explicit anchors with `## Heading {#anchor-id}`. Internal links such as `[text](#anchor-id)` stay on the same page.
-- Keep the published output in `docs/`.
+- Keep lesson text only in `src/book/**`.
+- Keep workflow, repository, and build notes out of lesson markdown.
+- Keep user-facing headings and page labels in markdown content.
+- Lesson markdown may use `:::details`, `:::note`, and `:::warning` blocks,
+  including nested combinations when a troubleshooting block needs it.
+- Lesson headings may use explicit anchors with `## Heading {#anchor-id}`.
+  Same-page links such as `[text](#anchor-id)` must remain local.
 - Preserve `docs/backup/index.html` as the manual reference copy.
 
 ## Page rules
 
-- `docs/index.html` is the main overview page.
-- Index page `<h1>` and `<title>` are taken from the first `# ...` heading in `src/book/chapter-01.md` (or the source path passed to the build script).
-- Page order is taken from the numbered list in `src/book/chapter-01.md`.
-- For each list item number `N`, the generator resolves source file `src/book/chapter-01/NN-*.md` (or `N-*.md`).
-- Standalone page filenames must match source markdown basenames:
-  `chapter-01/01-example.md` -> `docs/01-example.html`.
-- Every standalone page filename must start with a numeric prefix.
-- Standalone page title labels and navigation labels are taken from each page markdown first `# ...` heading.
-- Recommended page heading format is `# N. Title` for consistent numbering in index and navigation.
-- The main page is a compact vertical index with links only.
-- Each standalone page must include top and bottom navigation with previous, index, and next links generated from the markdown index order.
+- `docs/index.html` is the generated overview page.
+- The overview title comes from the first `# ...` heading in
+  `src/book/chapter-01.md` or the source path passed to the build script.
+- Page order comes from the numbered list in the chapter index markdown.
+- For list item `N`, the generator resolves `src/book/chapter-01/NN-*.md`
+  or `N-*.md`.
+- Standalone page filenames must match source markdown basenames and start with
+  a numeric prefix.
+- Standalone page and navigation labels come from each page's first `# ...`
+  heading.
+- Each standalone page includes generated top and bottom navigation with
+  previous, index, and next links.
 
-## Asset rules
+## Asset and build rules
 
+- Keep generated output in `docs/`.
 - Keep syntax highlighting assets in `docs/assets/highlightjs/`.
-- Keep source styles in `src/styles/book.css`.
-- Keep shared generated book styles in `docs/assets/book.css`; do not edit this generated copy directly.
-- Keep global page shell behavior in `src/templates/page.html`, including the theme toggle.
+- Edit shared styles in `src/styles/book.css`; treat `docs/assets/book.css` as
+  generated output.
+- Keep global shell behavior in `src/templates/page.html`.
 - Do not depend on `temp/` at runtime.
-
-## Design and theme rules
-
-- The book supports two themes through `data-theme="noir"` and `data-theme="graphite"`.
-- The initial theme follows `prefers-color-scheme` unless `localStorage["book-theme"]` contains a manual override.
-- The theme toggle is a single icon button in the shared template. Do not place theme controls in lesson markdown.
-- The shared CSS uses variables for colors, warning treatment, and asymmetric shape radii. Preserve readability for code-heavy student lessons.
-
-## Build rules
-
-- For manual Windows builds, prefer `scripts\build-book.cmd`; it wraps the PowerShell script with a process-local execution policy bypass.
+- For manual Windows builds, use `scripts\build-book.cmd`.
 
 ## Maintenance rules
 
-- Update `meta/` after each iteration.
-- Keep structural notes out of lesson markdown.
-- Keep markdown documentation in English.
+- Keep `meta/` current after repository structure, build, or design changes.
+- Keep service documentation compact and in English.
+- Do not edit `src/book/**`, generated HTML, generated CSS, or license text
+  during metadata cleanup tasks.
