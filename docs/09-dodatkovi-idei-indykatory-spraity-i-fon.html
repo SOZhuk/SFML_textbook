@@ -66,19 +66,31 @@
 <p>Спрайти на цій сторінці не мають прозорого фону. Замість цього фон залитий спеціальним зеленим кольором. Це називають <code>key color</code>: під час завантаження ми кажемо програмі, що цей колір треба зробити прозорим. Такий підхід корисний для навчання, бо добре показує різницю між сирим зображенням, текстурою і спрайтом.</p>
 <h2>Ідея 1. Панель і візуальні індикатори</h2>
 <p>Мета цієї ідеї - показати стан гри без тексту і шрифтів. Інформацію можна показувати фігурами. Для панелі праворуч спочатку збільшіть вікно:</p>
-<pre><code class="language-cpp">sf::RenderWindow window(sf::VideoMode({1100, 600}), &quot;SFML lesson&quot;);</code></pre>
+<pre><code class="language-cpp">const float gameWidth = 800.f;
+const float gameHeight = 600.f;
+const float panelWindowWidth = 1100.f;
+const float panelWidth = 220.f;
+
+sf::RenderWindow window(
+    sf::VideoMode({
+        static_cast&lt;unsigned&gt;(panelWindowWidth),
+        static_cast&lt;unsigned&gt;(gameHeight)
+    }),
+    &quot;SFML lesson&quot;
+);</code></pre>
 <p>Поле можна залишити всередині лівої частини вікна:</p>
-<pre><code class="language-cpp">sf::FloatRect playArea({50.f, 50.f}, {760.f, 500.f});</code></pre>
+<pre><code class="language-cpp">sf::FloatRect playArea({50.f, 50.f}, {gameWidth - 40.f, gameHeight - 100.f});</code></pre>
 <p>Потім зробіть бічну панель:</p>
-<pre><code class="language-cpp">sf::RectangleShape sidePanel({220.f, 500.f});
-sidePanel.setPosition({850.f, 50.f});
+<pre><code class="language-cpp">sf::RectangleShape sidePanel({panelWidth, gameHeight - 100.f});
+sidePanel.setPosition({gameWidth + 50.f, 50.f});
 sidePanel.setFillColor(sf::Color(50, 56, 70));</code></pre>
+<p>Такі константи прибирають магічні числа з коду. Якщо пізніше треба змінити розмір вікна або панелі, достатньо змінити одне значення, а не шукати <code>800</code>, <code>600</code> або <code>1100</code> у різних місцях програми.</p>
 <p>Намалюйте її до малювання кульок:</p>
 <pre><code class="language-cpp">window.draw(sidePanel);</code></pre>
 <p>Кількість кульок можна показати маленькими кружечками:</p>
 <pre><code class="language-cpp">for (int i = 0; i &lt; static_cast&lt;int&gt;(balls.size()) &amp;&amp; i &lt; 12; ++i) {
     sf::CircleShape dot(7.f);
-    dot.setPosition({875.f + (i % 4) * 22.f, 90.f + (i / 4) * 22.f});
+    dot.setPosition({gameWidth + 75.f + (i % 4) * 22.f, 90.f + (i / 4) * 22.f});
     dot.setFillColor(sf::Color(120, 190, 255));
     window.draw(dot);
 }</code></pre>
@@ -88,7 +100,7 @@ if (bars &gt; 20) bars = 20;
 
 for (int i = 0; i &lt; bars; ++i) {
     sf::RectangleShape bar({10.f, 20.f});
-    bar.setPosition({875.f + i * 10.f, 180.f});
+    bar.setPosition({gameWidth + 75.f + i * 10.f, 180.f});
     bar.setFillColor(sf::Color(255, 210, 90));
     window.draw(bar);
 }</code></pre>
@@ -210,8 +222,8 @@ sf::Sprite background(backgroundTexture);</code></pre>
 <p>Якщо картинка не збігається з розміром вікна, її можна масштабувати:</p>
 <pre><code class="language-cpp">sf::Vector2u textureSize = backgroundTexture.getSize();
 background.setScale({
-    800.f / static_cast&lt;float&gt;(textureSize.x),
-    600.f / static_cast&lt;float&gt;(textureSize.y)
+    gameWidth / static_cast&lt;float&gt;(textureSize.x),
+    gameHeight / static_cast&lt;float&gt;(textureSize.y)
 });</code></pre>
 <p>Малюйте фон першим, а всі ігрові об&#x27;єкти після нього:</p>
 <pre><code class="language-cpp">window.draw(background);
@@ -226,8 +238,8 @@ sf::Sprite bg2(backgroundTexture);
 
 sf::Vector2u textureSize = backgroundTexture.getSize();
 sf::Vector2f backgroundScale{
-    800.f / static_cast&lt;float&gt;(textureSize.x),
-    600.f / static_cast&lt;float&gt;(textureSize.y)
+    gameWidth / static_cast&lt;float&gt;(textureSize.x),
+    gameHeight / static_cast&lt;float&gt;(textureSize.y)
 };
 
 bg1.setScale(backgroundScale);
@@ -238,12 +250,12 @@ float bgSpeed = 60.f;</code></pre>
 <p>У частині оновлення:</p>
 <pre><code class="language-cpp">bgX -= bgSpeed * dt;
 
-if (bgX &lt;= -800.f) {
-    bgX += 800.f;
+if (bgX &lt;= -gameWidth) {
+    bgX += gameWidth;
 }
 
 bg1.setPosition({bgX, 0.f});
-bg2.setPosition({bgX + 800.f, 0.f});</code></pre>
+bg2.setPosition({bgX + gameWidth, 0.f});</code></pre>
 <p>У частині малювання:</p>
 <pre><code class="language-cpp">window.draw(bg1);
 window.draw(bg2);

@@ -187,6 +187,8 @@ sf::Text label(font, &quot;Bounces: 0&quot;, 24);
 label.setPosition({20.f, 20.f});</code></pre>
 <p>Після зміни лічильника оновлюйте текст:</p>
 <pre><code class="language-cpp">label.setString(&quot;Bounces: &quot; + std::to_string(wallBounces));</code></pre>
+<p>Після появи <code>label</code> доповніть обробник клавіші <code>R</code>, щоб він скидав не тільки заголовок вікна, а й текст у сцені:</p>
+<pre><code class="language-cpp">label.setString(&quot;Bounces: 0&quot;);</code></pre>
 <p>У малюванні додайте текст після поля і кульки, щоб напис був поверх сцени:</p>
 <pre><code class="language-cpp">window.draw(border);
 window.draw(ball);

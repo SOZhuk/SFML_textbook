@@ -60,35 +60,47 @@ for (const Ball& ball : balls) {
 
 Мета цього кроку - виконати стару логіку руху для кожної кульки окремо. Коли кульок багато, код руху і відбивання треба виконувати в циклі.
 
+Змінна `wallBounces` з попереднього розділу лишається спільним лічильником для всієї програми. Але колір тепер змінює не одна глобальна кулька, а саме та кулька зі списку, яка відбилася від межі.
+
 ```cpp
 for (Ball& ball : balls) {
     ball.position += ball.velocity * dt;
+    bool bounced = false;
 
     if (ball.position.x <= playArea.position.x) {
         ball.position.x = playArea.position.x;
         ball.velocity.x = -ball.velocity.x;
+        bounced = true;
     }
 
     if (ball.position.x + 2.f * ball.radius >= playArea.position.x + playArea.size.x) {
         ball.position.x = playArea.position.x + playArea.size.x - 2.f * ball.radius;
         ball.velocity.x = -ball.velocity.x;
+        bounced = true;
     }
 
     if (ball.position.y <= playArea.position.y) {
         ball.position.y = playArea.position.y;
         ball.velocity.y = -ball.velocity.y;
+        bounced = true;
     }
 
     if (ball.position.y + 2.f * ball.radius >= playArea.position.y + playArea.size.y) {
         ball.position.y = playArea.position.y + playArea.size.y - 2.f * ball.radius;
         ball.velocity.y = -ball.velocity.y;
+        bounced = true;
+    }
+
+    if (bounced) {
+        ball.color = randomColor();
+        wallBounces++;
     }
 }
 ```
 
-Проміжний результат: кілька кульок рухаються і відбиваються від меж поля. У цьому фрагменті кожна кулька має власні `position`, `velocity` і `radius`, тому однакові перевірки працюють для різних розмірів.
+Проміжний результат: кілька кульок рухаються і відбиваються від меж поля. У цьому фрагменті кожна кулька має власні `position`, `velocity`, `radius` і `color`, тому однакові перевірки працюють для різних розмірів і кольорів.
 
-Спробуйте ще: зробіть так, щоб кожна кулька змінювала колір після відбивання.
+Спробуйте ще: показуйте `wallBounces` не тільки у заголовку, а й у текстовому лічильнику з попереднього розділу.
 
 ## Крок 13. Додавання кульки кліком миші
 

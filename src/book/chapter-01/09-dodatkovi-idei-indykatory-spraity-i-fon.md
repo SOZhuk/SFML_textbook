@@ -21,22 +21,35 @@
 Мета цієї ідеї - показати стан гри без тексту і шрифтів. Інформацію можна показувати фігурами. Для панелі праворуч спочатку збільшіть вікно:
 
 ```cpp
-sf::RenderWindow window(sf::VideoMode({1100, 600}), "SFML lesson");
+const float gameWidth = 800.f;
+const float gameHeight = 600.f;
+const float panelWindowWidth = 1100.f;
+const float panelWidth = 220.f;
+
+sf::RenderWindow window(
+    sf::VideoMode({
+        static_cast<unsigned>(panelWindowWidth),
+        static_cast<unsigned>(gameHeight)
+    }),
+    "SFML lesson"
+);
 ```
 
 Поле можна залишити всередині лівої частини вікна:
 
 ```cpp
-sf::FloatRect playArea({50.f, 50.f}, {760.f, 500.f});
+sf::FloatRect playArea({50.f, 50.f}, {gameWidth - 40.f, gameHeight - 100.f});
 ```
 
 Потім зробіть бічну панель:
 
 ```cpp
-sf::RectangleShape sidePanel({220.f, 500.f});
-sidePanel.setPosition({850.f, 50.f});
+sf::RectangleShape sidePanel({panelWidth, gameHeight - 100.f});
+sidePanel.setPosition({gameWidth + 50.f, 50.f});
 sidePanel.setFillColor(sf::Color(50, 56, 70));
 ```
+
+Такі константи прибирають магічні числа з коду. Якщо пізніше треба змінити розмір вікна або панелі, достатньо змінити одне значення, а не шукати `800`, `600` або `1100` у різних місцях програми.
 
 Намалюйте її до малювання кульок:
 
@@ -49,7 +62,7 @@ window.draw(sidePanel);
 ```cpp
 for (int i = 0; i < static_cast<int>(balls.size()) && i < 12; ++i) {
     sf::CircleShape dot(7.f);
-    dot.setPosition({875.f + (i % 4) * 22.f, 90.f + (i / 4) * 22.f});
+    dot.setPosition({gameWidth + 75.f + (i % 4) * 22.f, 90.f + (i / 4) * 22.f});
     dot.setFillColor(sf::Color(120, 190, 255));
     window.draw(dot);
 }
@@ -63,7 +76,7 @@ if (bars > 20) bars = 20;
 
 for (int i = 0; i < bars; ++i) {
     sf::RectangleShape bar({10.f, 20.f});
-    bar.setPosition({875.f + i * 10.f, 180.f});
+    bar.setPosition({gameWidth + 75.f + i * 10.f, 180.f});
     bar.setFillColor(sf::Color(255, 210, 90));
     window.draw(bar);
 }
@@ -280,8 +293,8 @@ sf::Sprite background(backgroundTexture);
 ```cpp
 sf::Vector2u textureSize = backgroundTexture.getSize();
 background.setScale({
-    800.f / static_cast<float>(textureSize.x),
-    600.f / static_cast<float>(textureSize.y)
+    gameWidth / static_cast<float>(textureSize.x),
+    gameHeight / static_cast<float>(textureSize.y)
 });
 ```
 
@@ -308,8 +321,8 @@ sf::Sprite bg2(backgroundTexture);
 
 sf::Vector2u textureSize = backgroundTexture.getSize();
 sf::Vector2f backgroundScale{
-    800.f / static_cast<float>(textureSize.x),
-    600.f / static_cast<float>(textureSize.y)
+    gameWidth / static_cast<float>(textureSize.x),
+    gameHeight / static_cast<float>(textureSize.y)
 };
 
 bg1.setScale(backgroundScale);
@@ -324,12 +337,12 @@ float bgSpeed = 60.f;
 ```cpp
 bgX -= bgSpeed * dt;
 
-if (bgX <= -800.f) {
-    bgX += 800.f;
+if (bgX <= -gameWidth) {
+    bgX += gameWidth;
 }
 
 bg1.setPosition({bgX, 0.f});
-bg2.setPosition({bgX + 800.f, 0.f});
+bg2.setPosition({bgX + gameWidth, 0.f});
 ```
 
 У частині малювання:

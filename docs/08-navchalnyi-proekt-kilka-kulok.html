@@ -83,31 +83,42 @@ balls.push_back({{300.f, 220.f}, {-140.f, 90.f}, 25.f, sf::Color::Blue});</code>
 <p>Спробуйте ще: додайте третю кульку з іншою швидкістю.</p>
 <h2>Крок 12. Однакова логіка для всіх кульок</h2>
 <p>Мета цього кроку - виконати стару логіку руху для кожної кульки окремо. Коли кульок багато, код руху і відбивання треба виконувати в циклі.</p>
+<p>Змінна <code>wallBounces</code> з попереднього розділу лишається спільним лічильником для всієї програми. Але колір тепер змінює не одна глобальна кулька, а саме та кулька зі списку, яка відбилася від межі.</p>
 <pre><code class="language-cpp">for (Ball&amp; ball : balls) {
     ball.position += ball.velocity * dt;
+    bool bounced = false;
 
     if (ball.position.x &lt;= playArea.position.x) {
         ball.position.x = playArea.position.x;
         ball.velocity.x = -ball.velocity.x;
+        bounced = true;
     }
 
     if (ball.position.x + 2.f * ball.radius &gt;= playArea.position.x + playArea.size.x) {
         ball.position.x = playArea.position.x + playArea.size.x - 2.f * ball.radius;
         ball.velocity.x = -ball.velocity.x;
+        bounced = true;
     }
 
     if (ball.position.y &lt;= playArea.position.y) {
         ball.position.y = playArea.position.y;
         ball.velocity.y = -ball.velocity.y;
+        bounced = true;
     }
 
     if (ball.position.y + 2.f * ball.radius &gt;= playArea.position.y + playArea.size.y) {
         ball.position.y = playArea.position.y + playArea.size.y - 2.f * ball.radius;
         ball.velocity.y = -ball.velocity.y;
+        bounced = true;
+    }
+
+    if (bounced) {
+        ball.color = randomColor();
+        wallBounces++;
     }
 }</code></pre>
-<p>Проміжний результат: кілька кульок рухаються і відбиваються від меж поля. У цьому фрагменті кожна кулька має власні <code>position</code>, <code>velocity</code> і <code>radius</code>, тому однакові перевірки працюють для різних розмірів.</p>
-<p>Спробуйте ще: зробіть так, щоб кожна кулька змінювала колір після відбивання.</p>
+<p>Проміжний результат: кілька кульок рухаються і відбиваються від меж поля. У цьому фрагменті кожна кулька має власні <code>position</code>, <code>velocity</code>, <code>radius</code> і <code>color</code>, тому однакові перевірки працюють для різних розмірів і кольорів.</p>
+<p>Спробуйте ще: показуйте <code>wallBounces</code> не тільки у заголовку, а й у текстовому лічильнику з попереднього розділу.</p>
 <h2>Крок 13. Додавання кульки кліком миші</h2>
 <p>Мета цього кроку - створювати нові об&#x27;єкти під час роботи програми. Додайте просту функцію створення кульки:</p>
 <pre><code class="language-cpp">Ball makeBallAt(sf::Vector2f point) {

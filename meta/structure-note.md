@@ -58,3 +58,5 @@ The repository now includes a minimal source scaffold alongside the published `d
 - Practical lesson pages 6-9 received an editorial pass: step goals, intermediate-result wording, coordinate-model notes, click-boundary checks, and optional asset/animation transitions were clarified without changing URLs, templates, or the build generator.
 - `scripts/build-book.py` now preserves nested `:::details`, `:::note`, and `:::warning` blocks instead of closing the outer block at the first inner `:::`.
 - Page 6 now introduces frame-based movement before `dt`, then moves frame time, FPS limiting, and the `sf::sleep(...)` note into the final step.
+- Practical C++ code on pages 6-9 was checked with temporary SFML compile harnesses for final page states and optional page 9 snippets; no Markdown code fixes were required from that pass.
+- Pages 7-9 now clarify reset behavior for the text bounce label, carry `wallBounces` into the `std::vector<Ball>` version, and replace repeated panel/background dimensions with named constants.
