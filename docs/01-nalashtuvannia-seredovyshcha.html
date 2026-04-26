@@ -1,13 +1,51 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="uk" data-theme="noir">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>1. Налаштування середовища</title>
+  <script>
+    (function () {
+      function systemTheme() {
+        return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "noir"
+          : "graphite";
+      }
+
+      try {
+        var theme = localStorage.getItem("book-theme");
+        if (theme === "graphite" || theme === "noir") {
+          document.documentElement.dataset.theme = theme;
+        } else {
+          document.documentElement.dataset.theme = systemTheme();
+        }
+      } catch (error) {
+        document.documentElement.dataset.theme = systemTheme();
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="assets/book.css" />
   <link rel="stylesheet" href="assets/highlightjs/styles/panda-syntax-dark.min.css" />
 </head>
 <body>
+<div class="theme-switch">
+  <button type="button" class="theme-toggle" aria-label="Перемкнути тему" aria-pressed="false" title="Перемкнути тему">
+    <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2"></path>
+      <path d="M12 20v2"></path>
+      <path d="m4.93 4.93 1.41 1.41"></path>
+      <path d="m17.66 17.66 1.41 1.41"></path>
+      <path d="M2 12h2"></path>
+      <path d="M20 12h2"></path>
+      <path d="m6.34 17.66-1.41 1.41"></path>
+      <path d="m19.07 4.93-1.41 1.41"></path>
+    </svg>
+    <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20 14.6A8.5 8.5 0 0 1 9.4 4a7 7 0 1 0 10.6 10.6Z"></path>
+    </svg>
+  </button>
+</div>
 <div class="wrap">
 <nav class="page-nav"><a href="index.html">Index</a><a href="02-pershyi-proiekt-sfml.html">Next 2. Створення та запуск першого проєкту SFML</a></nav>
 <section class="hero">
@@ -150,5 +188,29 @@ int main() {
 </div>
 <script src="assets/highlightjs/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+<script>
+  (function () {
+    var button = document.querySelector(".theme-toggle");
+
+    function setTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+      if (!button) return;
+      button.setAttribute("aria-pressed", String(theme === "noir"));
+      button.setAttribute("aria-label", theme === "noir" ? "Увімкнути світлу тему" : "Увімкнути темну тему");
+      button.setAttribute("title", theme === "noir" ? "Увімкнути світлу тему" : "Увімкнути темну тему");
+    }
+
+    setTheme(document.documentElement.dataset.theme || "noir");
+    if (!button) return;
+
+    button.addEventListener("click", function () {
+      var theme = document.documentElement.dataset.theme === "noir" ? "graphite" : "noir";
+      setTheme(theme);
+      try {
+        localStorage.setItem("book-theme", theme);
+      } catch (error) {}
+    });
+  })();
+</script>
 </body>
 </html>
