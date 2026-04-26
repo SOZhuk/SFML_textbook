@@ -6,6 +6,7 @@
 - Do not place workflow notes, repository notes, or build planning inside lesson content.
 - Keep all user-facing headings and page labels in markdown content.
 - Lesson markdown may use callout blocks with `:::note Title` ... `:::` and `:::warning Title` ... `:::`. The generator renders them as styled note panels.
+- Lesson markdown may nest `:::details`, `:::note`, and `:::warning` blocks inside one another when a troubleshooting block needs a collapsible subsection.
 - Warning callouts must stay visually stronger than regular notes and details blocks, with high contrast in every supported theme.
 - Lesson headings may use explicit anchors with `## Heading {#anchor-id}`. Internal links such as `[text](#anchor-id)` stay on the same page.
 - Keep the published output in `docs/`.

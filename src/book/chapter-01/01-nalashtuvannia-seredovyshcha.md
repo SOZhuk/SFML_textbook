@@ -43,7 +43,6 @@ C:\msys64\ucrt64\bin
 Якщо перевірка не пройшла, встановіть MSYS2 і toolchain нижче, додайте `C:\msys64\ucrt64\bin` до `Path`, закрийте і знову відкрийте PowerShell або VS Code, а потім повторіть цю перевірку.
 
 Після виправлення поверніться до [перевірки компілятора](#compiler-check).
-:::
 
 ### Встановлення MSYS2 і toolchain {#msys2-install}
 
@@ -135,6 +134,7 @@ echo Restart PowerShell, cmd, and VS Code so they can read the updated Path.
 ```
 
 Якщо після першої команди `pacman -Syu` MSYS2 просить закрити вікно, закрийте його і запустіть `.cmd` файл ще раз.
+:::
 :::
 
 ## 2. Встановлення бібліотеки SFML {#sfml-install}

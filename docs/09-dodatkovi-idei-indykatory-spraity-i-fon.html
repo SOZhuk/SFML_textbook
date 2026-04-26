@@ -51,8 +51,8 @@
 <section class="hero">
 <h1>9. Додаткові ідеї: індикатори, спрайти, анімація і фон</h1>
 </section>
-<section class="card"><p>Цей розділ необов&#x27;язковий. Його задача - показати, у які боки можна розвивати проєкт після базової кульки. Тут можна брати одну ідею, пробувати її окремо, а не додавати все одразу.</p>
-<p>Для цієї сторінки є публічний набір навчальних файлів: <a href="static/assets.zip" target="_blank" rel="noreferrer">assets.zip</a>. Його можна розпакувати у свій C++ проєкт у папку <code>assets</code>.</p>
+<section class="card"><p>Цей розділ необов&#x27;язковий. Його задача - показати, у які боки можна розвивати проєкт після базової кульки. Тут можна брати одну ідею, пробувати її окремо, а не додавати все одразу. Найзручніший порядок такий: спочатку індикатори, потім спрайт, після цього анімація або фон.</p>
+<p>Для цієї сторінки є публічний набір навчальних файлів: <a href="static/assets.zip" target="_blank" rel="noreferrer">assets.zip</a>. Його можна розпакувати у свій C++ проєкт у папку <code>assets</code>. У прикладах нижче шляхи записані саме для такої папки: <code>assets/player.png</code>, <code>assets/NotoSans-Regular.ttf</code> і так далі.</p>
 <p>Окремі файли також доступні напряму:</p>
 <ul>
 <li><a href="static/fonts/NotoSans-Regular.ttf" target="_blank" rel="noreferrer">NotoSans-Regular.ttf</a> - шрифт для тексту;</li>
@@ -63,9 +63,9 @@
 <li><a href="static/backgrounds/starsky.jpg" target="_blank" rel="noreferrer">starsky.jpg</a> - фон зоряного неба;</li>
 <li><a href="static/credits.md" target="_blank" rel="noreferrer">credits.md</a> - ліцензії і походження файлів.</li>
 </ul>
-<p>Спрайти на цій сторінці не мають прозорого фону. Замість цього фон залитий спеціальним зеленим кольором. Це називають <code>key color</code>: під час завантаження ми кажемо програмі, що цей колір треба зробити прозорим.</p>
+<p>Спрайти на цій сторінці не мають прозорого фону. Замість цього фон залитий спеціальним зеленим кольором. Це називають <code>key color</code>: під час завантаження ми кажемо програмі, що цей колір треба зробити прозорим. Такий підхід корисний для навчання, бо добре показує різницю між сирим зображенням, текстурою і спрайтом.</p>
 <h2>Ідея 1. Панель і візуальні індикатори</h2>
-<p>Якщо не хочете працювати зі шрифтами, інформацію можна показувати фігурами. Для панелі праворуч спочатку збільшіть вікно:</p>
+<p>Мета цієї ідеї - показати стан гри без тексту і шрифтів. Інформацію можна показувати фігурами. Для панелі праворуч спочатку збільшіть вікно:</p>
 <pre><code class="language-cpp">sf::RenderWindow window(sf::VideoMode({1100, 600}), &quot;SFML lesson&quot;);</code></pre>
 <p>Поле можна залишити всередині лівої частини вікна:</p>
 <pre><code class="language-cpp">sf::FloatRect playArea({50.f, 50.f}, {760.f, 500.f});</code></pre>
@@ -92,9 +92,10 @@ for (int i = 0; i &lt; bars; ++i) {
     bar.setFillColor(sf::Color(255, 210, 90));
     window.draw(bar);
 }</code></pre>
-<p>Проміжний результат: праворуч з&#x27;являється панель з простими індикаторами.</p>
+<p>Проміжний результат: праворуч з&#x27;являється панель з простими індикаторами. Вона не впливає на фізику кульок, а тільки показує вже наявні дані.</p>
+<p>Спробуйте ще: додайте окремий колір для індикатора, коли кількість відбивань перевищує 10.</p>
 <h2>Ідея 2. Завантаження спрайта з key color</h2>
-<p>Завантажте <a href="static/sprites/player.png" target="_blank" rel="noreferrer">player.png</a> або розпакуйте <a href="static/assets.zip" target="_blank" rel="noreferrer">assets.zip</a>. У своєму C++ проєкті покладіть файл у папку <code>assets</code>.</p>
+<p>Мета цієї ідеї - замінити геометричну кульку на картинку, не змінюючи логіку руху. Завантажте <a href="static/sprites/player.png" target="_blank" rel="noreferrer">player.png</a> або розпакуйте <a href="static/assets.zip" target="_blank" rel="noreferrer">assets.zip</a>. У своєму C++ проєкті покладіть файл у папку <code>assets</code>.</p>
 <p>Для звичайного прозорого PNG вистачає <code>sf::Texture</code>. Але наші навчальні спрайти зроблені інакше: фон у них зелений. Тому спочатку завантажимо картинку як <code>sf::Image</code>, зробимо зелений фон прозорим, а потім створимо текстуру.</p>
 <pre><code class="language-cpp">sf::Image playerImage(&quot;assets/player.png&quot;);
 
@@ -104,13 +105,13 @@ playerImage.createMaskFromColor(keyColor);
 sf::Texture playerTexture(playerImage);
 sf::Sprite player(playerTexture);</code></pre>
 <p>Тут <code>getPixel({0, 0})</code> бере колір лівого верхнього пікселя. У наших файлах цей піксель належить фону, тому його можна використати як key color. <code>createMaskFromColor</code> знаходить пікселі такого самого кольору і робить їх прозорими.</p>
-<p>Позицію спрайта можна оновлювати тією самою змінною <code>position</code>:</p>
+<p>Позицію спрайта можна оновлювати тією самою змінною <code>position</code>. У цьому варіанті <code>position</code> усе ще означає лівий верхній кут об&#x27;єкта:</p>
 <pre><code class="language-cpp">player.setPosition(position);
 window.draw(player);</code></pre>
 <p>Важливо: <code>sf::Sprite</code> не копіює текстуру всередину себе. Текстура <code>playerTexture</code> має існувати весь час, поки використовується спрайт.</p>
 <p>Спробуйте ще: замініть кульку на спрайт тільки в малюванні, а логіку руху залиште стару. Це найпростіший спосіб перейти від геометричної фігури до картинки.</p>
 <h2>Ідея 3. Спрайт-стрілочка повертається за напрямком руху</h2>
-<p>Якщо спрайт гравця схожий на стрілку, його можна повертати туди, куди зараз рухається об&#x27;єкт. Для цього нам потрібна швидкість <code>velocity</code>.</p>
+<p>Мета цієї ідеї - зв&#x27;язати вигляд спрайта з напрямком руху. Якщо спрайт гравця схожий на стрілку, його можна повертати туди, куди зараз рухається об&#x27;єкт. Для цього нам потрібна швидкість <code>velocity</code>.</p>
 <p>Додайте зверху файлу:</p>
 <pre><code class="language-cpp">#include &lt;cmath&gt;</code></pre>
 <p>Перед <code>main()</code> додайте:</p>
@@ -122,7 +123,7 @@ player.setOrigin({
     static_cast&lt;float&gt;(playerSize.x) / 2.f,
     static_cast&lt;float&gt;(playerSize.y) / 2.f
 });</code></pre>
-<p>За замовчуванням <code>position</code> у наших прикладах часто означає лівий верхній кут кульки. Спрайт зі встановленим центром зручніше ставити саме в центр об&#x27;єкта:</p>
+<p>За замовчуванням <code>position</code> у наших прикладах часто означає лівий верхній кут кульки. Але після <code>setOrigin(...)</code> спрайт зі встановленим центром зручніше ставити саме в центр об&#x27;єкта:</p>
 <pre><code class="language-cpp">sf::Vector2f playerCenter = position + sf::Vector2f(radius, radius);
 player.setPosition(playerCenter);</code></pre>
 <p>Тепер можна порахувати кут за швидкістю:</p>
@@ -145,8 +146,9 @@ if (v.x != 0.f || v.y != 0.f) {
 player.setPosition(center);
 window.draw(player);</code></pre>
 <p>Проміжний результат: замість кульки видно спрайт, який не просто рухається, а ще й повертається у напрямку руху.</p>
+<p>Спробуйте ще: тимчасово приберіть <code>+ 90.f</code> і подивіться, як зміниться напрям спрайта.</p>
 <h2>Ідея 4. Кадрова анімація персонажа</h2>
-<p>Кадрова анімація - це швидка заміна однієї картинки іншою. У нас є п&#x27;ять файлів: <code>octopus01.png</code>, <code>octopus02.png</code>, <code>octopus03.png</code>, <code>octopus04.png</code>, <code>octopus05.png</code>. Покладіть їх у папку <code>assets</code>.</p>
+<p>Мета цієї ідеї - додати рух усередині самого спрайта. Кадрова анімація - це швидка заміна однієї картинки іншою. У нас є п&#x27;ять файлів: <code>octopus01.png</code>, <code>octopus02.png</code>, <code>octopus03.png</code>, <code>octopus04.png</code>, <code>octopus05.png</code>. Покладіть їх у папку <code>assets</code>.</p>
 <p>Додайте зверху файлу:</p>
 <pre><code class="language-cpp">#include &lt;array&gt;
 #include &lt;cstddef&gt;
@@ -190,7 +192,7 @@ float frameDuration = 0.12f;</code></pre>
     animationClock.restart();
 }</code></pre>
 <p>Оператор <code>%</code> повертає залишок від ділення. Завдяки цьому після останнього кадру індекс знову стає <code>0</code>, і анімація повторюється по колу.</p>
-<p>У частині малювання:</p>
+<p>У частині малювання поставте анімований спрайт у центр кульки або іншого об&#x27;єкта, який він замінює:</p>
 <pre><code class="language-cpp">sf::Vector2f playerCenter = position + sf::Vector2f(radius, radius);
 animatedPlayer.setPosition(playerCenter);
 window.draw(animatedPlayer);</code></pre>
@@ -200,8 +202,9 @@ window.draw(animatedPlayer);</code></pre>
     animatedPlayer.setRotation(sf::degrees(angle + 90.f));
 }</code></pre>
 <p>Проміжний результат: персонаж рухається як раніше, але його зображення змінюється кілька разів на секунду.</p>
+<p>Спробуйте ще: змініть <code>frameDuration</code> і порівняйте повільну та швидку анімацію.</p>
 <h2>Ідея 5. Статичний фон</h2>
-<p>Завантажте <a href="static/backgrounds/starsky.jpg" target="_blank" rel="noreferrer">starsky.jpg</a> або розпакуйте <a href="static/assets.zip" target="_blank" rel="noreferrer">assets.zip</a>. У своєму C++ проєкті покладіть файл у папку <code>assets</code>. Завантажте текстуру:</p>
+<p>Мета цієї ідеї - замінити однотонне очищення вікна на фонове зображення. Завантажте <a href="static/backgrounds/starsky.jpg" target="_blank" rel="noreferrer">starsky.jpg</a> або розпакуйте <a href="static/assets.zip" target="_blank" rel="noreferrer">assets.zip</a>. У своєму C++ проєкті покладіть файл у папку <code>assets</code>. Завантажте текстуру:</p>
 <pre><code class="language-cpp">sf::Texture backgroundTexture(&quot;assets/starsky.jpg&quot;);
 sf::Sprite background(backgroundTexture);</code></pre>
 <p>Якщо картинка не збігається з розміром вікна, її можна масштабувати:</p>
@@ -210,12 +213,13 @@ background.setScale({
     800.f / static_cast&lt;float&gt;(textureSize.x),
     600.f / static_cast&lt;float&gt;(textureSize.y)
 });</code></pre>
-<p>Малюйте фон першим:</p>
+<p>Малюйте фон першим, а всі ігрові об&#x27;єкти після нього:</p>
 <pre><code class="language-cpp">window.draw(background);
 window.draw(ball);</code></pre>
 <p>Проміжний результат: замість однотонного кольору у вікні є фон.</p>
+<p>Спробуйте ще: залиште <code>window.clear(...)</code>, але змініть його колір на такий, який добре виглядає, якщо фон не завантажився.</p>
 <h2>Ідея 6. Рух фону</h2>
-<p>Найпростіший варіант рухомого фону для SFML - намалювати дві копії фону поруч і повільно зсувати їх.</p>
+<p>Мета цієї ідеї - створити відчуття руху навіть тоді, коли об&#x27;єкт лишається в центрі екрана. Найпростіший варіант рухомого фону для SFML - намалювати дві копії фону поруч і повільно зсувати їх.</p>
 <p>Перед циклом:</p>
 <pre><code class="language-cpp">sf::Sprite bg1(backgroundTexture);
 sf::Sprite bg2(backgroundTexture);
@@ -244,7 +248,8 @@ bg2.setPosition({bgX + 800.f, 0.f});</code></pre>
 <pre><code class="language-cpp">window.draw(bg1);
 window.draw(bg2);
 window.draw(ball);</code></pre>
-<p>Цей приклад прокручує фон тільки горизонтально. Для сильніших: спробуйте змінювати <code>bgX</code> залежно від швидкості кульки або додати <code>bgY</code> для руху вгору-вниз.</p>
+<p>Цей приклад прокручує фон тільки горизонтально. Коли перша копія повністю виїжджає ліворуч, ми переносимо її назад на ширину вікна, тому між копіями не має бути порожньої смуги.</p>
+<p>Спробуйте ще: змінюйте <code>bgX</code> залежно від швидкості кульки або додайте <code>bgY</code> для руху вгору-вниз.</p>
 <h2>Що можна розвивати далі</h2>
 <ul>
 <li>замінити кульку на спрайт гравця;</li>

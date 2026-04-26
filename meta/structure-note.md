@@ -55,3 +55,6 @@ The repository now includes a minimal source scaffold alongside the published `d
 - The shared template includes one day/night icon theme toggle. It defaults from browser `prefers-color-scheme` and stores manual choices in `localStorage`.
 - Shape is controlled through CSS variables such as `--radius-panel`, `--radius-control`, `--radius-code`, `--radius-warning`, and `--radius-marker`.
 - Warning blocks are intentionally more prominent than regular notes/details and use dedicated warning color variables per theme.
+- Practical lesson pages 6-9 received an editorial pass: step goals, intermediate-result wording, coordinate-model notes, click-boundary checks, and optional asset/animation transitions were clarified without changing URLs, templates, or the build generator.
+- `scripts/build-book.py` now preserves nested `:::details`, `:::note`, and `:::warning` blocks instead of closing the outer block at the first inner `:::`.
+- Page 6 now introduces frame-based movement before `dt`, then moves frame time, FPS limiting, and the `sf::sleep(...)` note into the final step.

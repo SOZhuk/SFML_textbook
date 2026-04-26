@@ -56,10 +56,12 @@ def render_markdown(source: str, drop_first_h1: bool = False) -> str:
     in_details = False
     details_title = ""
     details_lines: list[str] = []
+    details_depth = 0
     in_callout = False
     callout_kind = "note"
     callout_title = ""
     callout_lines: list[str] = []
+    callout_depth = 0
     first_h1_dropped = False
 
     def flush_list() -> None:
@@ -69,7 +71,7 @@ def render_markdown(source: str, drop_first_h1: bool = False) -> str:
             in_list = None
 
     def flush_details() -> None:
-        nonlocal in_details, details_title, details_lines
+        nonlocal in_details, details_title, details_lines, details_depth
         if in_details:
             details_body = render_markdown("\n".join(details_lines))
             body.append(
@@ -79,9 +81,10 @@ def render_markdown(source: str, drop_first_h1: bool = False) -> str:
             in_details = False
             details_title = ""
             details_lines = []
+            details_depth = 0
 
     def flush_callout() -> None:
-        nonlocal in_callout, callout_kind, callout_title, callout_lines
+        nonlocal in_callout, callout_kind, callout_title, callout_lines, callout_depth
         if in_callout:
             callout_body = render_markdown("\n".join(callout_lines))
             title = f'<strong class="note-title">{inline(callout_title)}</strong>' if callout_title else ""
@@ -90,20 +93,33 @@ def render_markdown(source: str, drop_first_h1: bool = False) -> str:
             callout_kind = "note"
             callout_title = ""
             callout_lines = []
+            callout_depth = 0
 
     for line in lines:
         raw = line.rstrip()
         check = raw.lstrip()
 
         if in_callout:
-            if check == ":::":
+            if check.startswith(":::details") or re.match(r"^:::(note|warning)\b", check):
+                callout_depth += 1
+                callout_lines.append(raw)
+            elif check == ":::" and callout_depth > 0:
+                callout_depth -= 1
+                callout_lines.append(raw)
+            elif check == ":::":
                 flush_callout()
             else:
                 callout_lines.append(raw)
             continue
 
         if in_details:
-            if check == ":::":
+            if check.startswith(":::details") or re.match(r"^:::(note|warning)\b", check):
+                details_depth += 1
+                details_lines.append(raw)
+            elif check == ":::" and details_depth > 0:
+                details_depth -= 1
+                details_lines.append(raw)
+            elif check == ":::":
                 flush_details()
             else:
                 details_lines.append(raw)
@@ -130,6 +146,7 @@ def render_markdown(source: str, drop_first_h1: bool = False) -> str:
             in_details = True
             details_title = check[len(":::details") :].strip() or "Додаткові команди"
             details_lines = []
+            details_depth = 0
             continue
 
         callout_match = re.match(r"^:::(note|warning)\b(.*)$", check)
@@ -139,6 +156,7 @@ def render_markdown(source: str, drop_first_h1: bool = False) -> str:
             callout_kind = callout_match.group(1)
             callout_title = callout_match.group(2).strip()
             callout_lines = []
+            callout_depth = 0
             continue
 
         if not check:

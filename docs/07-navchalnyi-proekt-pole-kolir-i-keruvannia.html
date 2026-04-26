@@ -51,9 +51,9 @@
 <section class="hero">
 <h1>7. Навчальний проєкт: поле, колір і керування</h1>
 </section>
-<section class="card"><p>Цей розділ продовжує попередній. Ми не переписуємо програму з нуля, а поступово додаємо нові можливості до вже робочої кульки.</p>
+<section class="card"><p>Цей розділ продовжує попередній. Ми не переписуємо програму з нуля, а поступово додаємо нові можливості до вже робочої кульки. Після кожного кроку запускайте програму і перевіряйте саме ту зміну, яку щойно додали.</p>
 <h2>Крок 6. Колір після удару</h2>
-<p>Додайте зверху файлу:</p>
+<p>Мета цього кроку - зробити удар об межу помітним для користувача. Додайте зверху файлу:</p>
 <pre><code class="language-cpp">#include &lt;cstdlib&gt;
 #include &lt;ctime&gt;</code></pre>
 <p>Перед <code>main()</code> додайте функцію:</p>
@@ -66,6 +66,7 @@
 }</code></pre>
 <p>На початку <code>main()</code> додайте:</p>
 <pre><code class="language-cpp">std::srand(static_cast&lt;unsigned&gt;(std::time(nullptr)));</code></pre>
+<p>Цей рядок запускає генератор випадкових чисел з різним початковим значенням під час кожного запуску програми.</p>
 <p>Перед перевірками меж створіть прапорець:</p>
 <pre><code class="language-cpp">bool bounced = false;</code></pre>
 <p>У кожному місці, де швидкість змінюється на протилежну, додайте:</p>
@@ -75,10 +76,10 @@
     color = randomColor();
     ball.setFillColor(color);
 }</code></pre>
-<p>Проміжний результат: кулька змінює колір після удару об межу.</p>
+<p>Проміжний результат: кулька змінює колір один раз після удару об межу. Якщо кулька торкнулася кута і відбилася одразу по двох осях, прапорець усе одно обробляє це як один удар у цьому кадрі.</p>
 <p>Спробуйте ще: зробіть не випадковий колір, а перемикання між двома кольорами.</p>
 <h2>Крок 7. Поле менше за вікно</h2>
-<p>Тепер зробимо внутрішнє поле. Кулька буде відбиватися не від країв вікна, а від прямокутної області всередині нього.</p>
+<p>Мета цього кроку - відокремити ігрове поле від усього вікна. Кулька буде відбиватися не від країв вікна, а від прямокутної області всередині нього.</p>
 <p>Перед циклом створіть поле:</p>
 <pre><code class="language-cpp">sf::FloatRect playArea({50.f, 50.f}, {700.f, 500.f});
 
@@ -87,7 +88,7 @@ border.setPosition(playArea.position);
 border.setFillColor(sf::Color::Transparent);
 border.setOutlineThickness(3.f);
 border.setOutlineColor(sf::Color(220, 220, 220));</code></pre>
-<p>У перевірках меж замініть <code>0</code>, <code>windowWidth</code> і <code>windowHeight</code> на межі <code>playArea</code>:</p>
+<p>У перевірках меж замініть <code>0</code>, <code>windowWidth</code> і <code>windowHeight</code> на межі <code>playArea</code>. Пам&#x27;ятайте: <code>position</code> все ще означає лівий верхній кут кульки, а не її центр.</p>
 <pre><code class="language-cpp">if (position.x &lt;= playArea.position.x) {
     position.x = playArea.position.x;
     velocity.x = -velocity.x;
@@ -118,7 +119,7 @@ window.draw(ball);</code></pre>
 <p>Проміжний результат: у вікні видно прямокутне поле, а кулька відбивається від його меж.</p>
 <p>Спробуйте ще: змініть розмір поля або колір рамки.</p>
 <h2>Крок 8. Керування з клавіатури</h2>
-<p>Для безперервного керування перевіряємо стан клавіш кожен кадр. Додайте після обробки подій:</p>
+<p>Мета цього кроку - дати гравцю вплив на швидкість кульки. Для безперервного керування перевіряємо стан клавіш кожен кадр. Додайте після обробки подій:</p>
 <pre><code class="language-cpp">float accel = 300.f;
 
 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
@@ -133,7 +134,7 @@ if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
     velocity.y += accel * dt;
 }</code></pre>
-<p>Тут клавіатура змінює швидкість, а не позицію напряму. Тому кулька поводиться більш плавно: вона прискорюється і продовжує рухатися.</p>
+<p>Тут клавіатура змінює швидкість, а не позицію напряму. Тому кулька поводиться більш плавно: вона прискорюється і продовжує рухатися після відпускання клавіші.</p>
 <p>Щоб кулька не розганялася безмежно, можна додати просте обмеження швидкості:</p>
 <pre><code class="language-cpp">float maxSpeed = 550.f;
 
@@ -141,13 +142,13 @@ if (velocity.x &gt; maxSpeed) velocity.x = maxSpeed;
 if (velocity.x &lt; -maxSpeed) velocity.x = -maxSpeed;
 if (velocity.y &gt; maxSpeed) velocity.y = maxSpeed;
 if (velocity.y &lt; -maxSpeed) velocity.y = -maxSpeed;</code></pre>
-<p>Як додаткове завдання можна додати просте тертя, щоб кулька поступово сповільнювалася, коли клавіші не натиснуті. Після обробки клавіатури і обмеження швидкості помножте швидкість на число трохи менше за <code>1</code>:</p>
+<p>Як додаткове завдання можна додати просте тертя, щоб кулька поступово сповільнювалася. Після обробки клавіатури і обмеження швидкості помножте швидкість на число трохи менше за <code>1</code>:</p>
 <pre><code class="language-cpp">velocity *= 0.99f;</code></pre>
-<p>Значення <code>0.99f</code> дає слабке сповільнення. Якщо взяти <code>0.95f</code>, кулька гальмуватиме помітно швидше.</p>
+<p>Значення <code>0.99f</code> дає слабке сповільнення. Якщо взяти <code>0.95f</code>, кулька гальмуватиме помітно швидше. Це спрощена модель тертя: вона залежить від кількості кадрів, але для першого експерименту її достатньо.</p>
 <p>Проміжний результат: стрілки впливають на напрям і швидкість руху.</p>
 <p>Спробуйте ще: зробіть <code>accel</code> більшим або меншим.</p>
 <h2>Крок 9. Лічильник відбивань</h2>
-<p>Додайте змінну перед головним циклом:</p>
+<p>Мета цього кроку - зберігати простий ігровий показник. Додайте змінну перед головним циклом:</p>
 <pre><code class="language-cpp">int wallBounces = 0;</code></pre>
 <p>Коли було відбивання, збільшуйте лічильник:</p>
 <pre><code class="language-cpp">if (bounced) {
@@ -155,7 +156,7 @@ if (velocity.y &lt; -maxSpeed) velocity.y = -maxSpeed;</code></pre>
     ball.setFillColor(color);
     wallBounces++;
 }</code></pre>
-<p>Найпростіший спосіб показати число без шрифтів - записати його в заголовок вікна. Додайте:</p>
+<p>Найпростіший спосіб показати число без шрифтів - записати його в заголовок вікна. Додайте після оновлення лічильника:</p>
 <pre><code class="language-cpp">window.setTitle(&quot;Bounces: &quot; + std::to_string(wallBounces));</code></pre>
 <p>Для цього зверху файлу потрібен ще один include:</p>
 <pre><code class="language-cpp">#include &lt;string&gt;</code></pre>
@@ -173,19 +174,23 @@ if (velocity.y &lt; -maxSpeed) velocity.y = -maxSpeed;</code></pre>
         position = {100.f, 100.f};
         velocity = {160.f, 120.f};
         wallBounces = 0;
+        ball.setPosition(position);
+        window.setTitle(&quot;Bounces: 0&quot;);
     }
 }</code></pre>
 <p>Це саме події, а не стан клавіатури: дія виконується один раз у момент натискання.</p>
 <h2>Крок 10. Текстовий лічильник у вікні</h2>
-<p>Щоб показати текст прямо у вікні, потрібен файл шрифту. Завантажте <a href="static/fonts/NotoSans-Regular.ttf" target="_blank" rel="noreferrer">NotoSans-Regular.ttf</a> або весь <a href="static/assets.zip" target="_blank" rel="noreferrer">набір навчальних файлів</a>, створіть у своєму C++ проєкті папку <code>assets</code> і покладіть шрифт туди.</p>
+<p>Мета цього кроку - перенести показник із заголовка вікна у саму сцену. Щоб показати текст прямо у вікні, потрібен файл шрифту. Завантажте <a href="static/fonts/NotoSans-Regular.ttf" target="_blank" rel="noreferrer">NotoSans-Regular.ttf</a> або весь <a href="static/assets.zip" target="_blank" rel="noreferrer">набір навчальних файлів</a>, створіть у своєму C++ проєкті папку <code>assets</code> і покладіть шрифт туди.</p>
 <aside class="note note-warning"><strong class="note-title">Увага</strong><p>Папка <code>assets</code> має бути там, звідки запускається <code>.exe</code>. Якщо шрифт не завантажується, спочатку перевірте робочу директорію запуску програми.</p></aside>
 <pre><code class="language-cpp">sf::Font font(&quot;assets/NotoSans-Regular.ttf&quot;);
 sf::Text label(font, &quot;Bounces: 0&quot;, 24);
 label.setPosition({20.f, 20.f});</code></pre>
 <p>Після зміни лічильника оновлюйте текст:</p>
 <pre><code class="language-cpp">label.setString(&quot;Bounces: &quot; + std::to_string(wallBounces));</code></pre>
-<p>У малюванні додайте:</p>
-<pre><code class="language-cpp">window.draw(label);</code></pre>
+<p>У малюванні додайте текст після поля і кульки, щоб напис був поверх сцени:</p>
+<pre><code class="language-cpp">window.draw(border);
+window.draw(ball);
+window.draw(label);</code></pre>
 <p>Проміжний результат: лічильник показаний у самому вікні.</p>
 <p>Спробуйте ще: змініть розмір тексту, позицію або колір.</p>
 <h2>Контрольна точка</h2>

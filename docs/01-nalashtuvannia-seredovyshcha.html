@@ -70,7 +70,7 @@
 <pre><code class="language-text">C:\msys64\ucrt64\bin</code></pre>
 <p>Перевірка пройдена, якщо <code>g++ --version</code> виводить версію компілятора, а <code>where g++</code> показує шлях із <code>C:\msys64\ucrt64\bin</code>.</p>
 <details class="details-block"><summary>Що робити, якщо перевірка компілятора не пройшла</summary><div class="details-body"><p>Якщо перевірка не пройшла, встановіть MSYS2 і toolchain нижче, додайте <code>C:\msys64\ucrt64\bin</code> до <code>Path</code>, закрийте і знову відкрийте PowerShell або VS Code, а потім повторіть цю перевірку.</p>
-<p>Після виправлення поверніться до <a href="#compiler-check">перевірки компілятора</a>.</p></div></details>
+<p>Після виправлення поверніться до <a href="#compiler-check">перевірки компілятора</a>.</p>
 <h3 id="msys2-install">Встановлення MSYS2 і toolchain</h3>
 <p>Якщо MSYS2 ще не встановлений, встановіть його:</p>
 <pre><code class="language-powershell">winget install --id MSYS2.MSYS2 -e</code></pre>
@@ -135,7 +135,7 @@ g++ --version
 echo.
 echo Done.
 echo Restart PowerShell, cmd, and VS Code so they can read the updated Path.</code></pre>
-<p>Якщо після першої команди <code>pacman -Syu</code> MSYS2 просить закрити вікно, закрийте його і запустіть <code>.cmd</code> файл ще раз.</p></div></details>
+<p>Якщо після першої команди <code>pacman -Syu</code> MSYS2 просить закрити вікно, закрийте його і запустіть <code>.cmd</code> файл ще раз.</p></div></details></div></details>
 <h2 id="sfml-install">2. Встановлення бібліотеки SFML</h2>
 <p>Цей крок потрібен, якщо ви будете збирати SFML-проєкт локально через MSYS2 UCRT64 або через підготовлений викладачем шаблон, який очікує встановлену бібліотеку в системі.</p>
 <p>Якщо ви створюєте проєкт через клон офіційного репозиторію <code>SFML/cmake-sfml-project</code> і CMake, окремо встановлювати SFML через <code>pacman</code> не обов&#x27;язково: CMake-шаблон може завантажити і підключити бібліотеку під час налаштування проєкту.</p>
